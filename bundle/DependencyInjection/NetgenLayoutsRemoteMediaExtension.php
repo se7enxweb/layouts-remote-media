@@ -14,6 +14,7 @@ use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Yaml\Yaml;
+use InvalidArgumentException;
 
 use function file_get_contents;
 
@@ -33,6 +34,23 @@ final class NetgenLayoutsRemoteMediaExtension extends Extension implements Prepe
                     new YamlFileLoader($container, $locator),
                 ],
             ),
+        );
+
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
+        if (!isset($config['provider'])) {
+            throw new InvalidArgumentException('The "provider" option must be set');
+        }
+
+        $container->setParameter(
+            'netgen_layouts.remote_media.cache.adapter_service_name',
+            $config['cache']['adapter'],
+        );
+
+        $container->setParameter(
+            'netgen_layouts.remote_media.cache.provider',
+            $config['cache']['provider'],
         );
 
         $loader->load('default_settings.yaml');

@@ -1,0 +1,7 @@
+services:
+    netgen_layouts.remote_media.cache.adapter:
+        synthetic: true
+
+    nglrm.cache:
+        parent: netgen_layouts.remote_media.cache.adapter
+        tags: { name: cache.pool }

@@ -3,3 +3,7 @@ parameters:
         - image
         - video
         - raw
+
+cache:
+    adapter: cache.adapter.filesystem
+    provider: ~
