@@ -39,27 +39,24 @@ final class NetgenLayoutsRemoteMediaExtension extends Extension implements Prepe
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        if (!isset($config['provider'])) {
-            throw new InvalidArgumentException('The "provider" option must be set');
-        }
-
         $container->setParameter(
-            'netgen_layouts.remote_media.cache.adapter_service_name',
-            $config['cache']['adapter'],
+            'netgen_layouts.remote_media.cache.pool_name',
+            $config['cache']['pool'],
         );
 
         $container->setParameter(
-            'netgen_layouts.remote_media.cache.provider',
-            $config['cache']['provider'],
+            'netgen_layouts.remote_media.cache.ttl',
+            $config['cache']['ttl'],
         );
 
-        $loader->load('default_settings.yaml');
+        $loader->load('default_parameters.yaml');
         $loader->load('services/**/*.yaml', 'glob');
     }
 
     public function prepend(ContainerBuilder $container): void
     {
         $prependConfigs = [
+            'default_settings.yaml' => 'netgen_layouts_remote_media',
             'item_types.yaml' => 'netgen_content_browser',
             'block_definitions.yaml' => 'netgen_layouts',
             'value_types.yaml' => 'netgen_layouts',

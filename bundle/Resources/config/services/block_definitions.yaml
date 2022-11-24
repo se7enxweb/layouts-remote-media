@@ -1,9 +1,9 @@
 services:
-    netgen_laoyuts:remote_media.block.block_definition_handler.remote_media:
+    netgen_layouts.remote_media.block.block_definition_handler.remote_media:
         class: Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler
         arguments:
             - "@netgen_layouts.remote_media.item.value_loader.remote_media"
-            - "@netgen_remote_media.variation.resolver"
+            - "@netgen_remote_media.resolver.variation"
             - "%netgen_layouts.remote_media.layouts_block.allowed_resource_types%"
         tags:
             - { name: netgen_layouts.block_definition_handler, identifier: remote_media }

@@ -14,24 +14,15 @@ final class CachePoolPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container): void
     {
+        if (!$container->hasParameter('netgen_layouts.remote_media.cache.pool_name')) {
+            return;
+        }
+
         $container->setDefinition(
-            'netgen_layouts.remote_media.cache.adapter',
+            'netgen_layouts.remote_media.cache.pool',
             $container->findDefinition(
-                $container->getParameter('netgen_layouts.remote_media.cache.adapter_service_name'),
+                $container->getParameter('netgen_layouts.remote_media.cache.pool_name'),
             ),
         );
-
-        $provider = $container->getParameter('netgen_layouts.remote_media.cache.provider');
-
-        if ($provider !== null) {
-            $cacheService = $container->getDefinition('nglrm.cache');
-
-            $cacheService->addTag(
-                'cache.pool',
-                [
-                    'provider' => $provider,
-                ],
-            );
-        }
     }
 }

@@ -22,18 +22,14 @@ final class Configuration implements ConfigurationInterface
     {
         $rootNode
             ->children()
-            ->arrayNode('cache')
-            ->children()
-            ->scalarNode('adapter')
-            ->isRequired()
-            ->cannotBeEmpty()
-            ->defaultValue('cache.adapter.filesystem')
-            ->end()
-            ->scalarNode('provider')
-            ->defaultNull()
-            ->end()
-            ->end()
-            ->end()
+                ->arrayNode('cache')
+                    ->children()
+                        ->scalarNode('pool')
+                        ->end()
+                        ->integerNode('ttl')
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
     }
 }

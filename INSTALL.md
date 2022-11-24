@@ -21,3 +21,21 @@ $bundles[] = new Netgen\Bundle\LayoutsRemoteMediaBundle\LayoutsRemoteMediaBundle
 
 return $bundles;
 ```
+
+## Configure the bundle
+
+### Cache configuration
+
+This bundle uses cache to store next cursor when fetching remote media, due to incompatibility between cursor-based pagination in Remote Media and limit/offset based pagination in Netgen Layouts.
+
+You can manually configure cache pool as well as desired TTL:
+
+
+```yaml
+netgen_remote_media:
+    cache:
+        pool: cache.app
+        ttl: 7200
+```
+
+Above shown are the default used parameters. For more information about creating and configuring cache pools, see https://symfony.com/doc/current/cache.html.

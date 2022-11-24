@@ -1,9 +1,3 @@
-parameters:
-    netgen_layouts.remote_media.layouts_block.allowed_resource_types:
-        - image
-        - video
-        - raw
-
 cache:
-    adapter: cache.adapter.filesystem
-    provider: ~
+    pool: cache.app
+    ttl: 7200
