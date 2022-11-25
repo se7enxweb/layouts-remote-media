@@ -14,7 +14,7 @@ use Netgen\Layouts\Parameters\ParameterType\TextLineType;
 use Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler;
 use Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
-use Netgen\RemoteMedia\Core\VariationResolver;
+use Netgen\RemoteMedia\Core\Resolver\Variation as VariationResolver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -126,9 +126,10 @@ final class RemoteMediaHandlerTest extends TestCase
             ],
         ]);
 
-        $value = RemoteResource::createFromParameters([
-            'resourceId' => 'folder/subfolder/image_name.jpg',
-            'resourceType' => 'image',
+        $value = new RemoteResource([
+            'remoteId' => 'folder/subfolder/image_name.jpg',
+            'type' => 'image',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/subfolder/image_name.jpg',
         ]);
 
         $this->valueLoaderMock
@@ -139,9 +140,9 @@ final class RemoteMediaHandlerTest extends TestCase
 
         $this->handler->getDynamicParameters($params, $block);
 
-        self::assertSame($value->resourceType, $params['resource']->resourceType);
-        self::assertSame($value->type, $params['resource']->type);
-        self::assertSame($value->url, $params['resource']->url);
+        self::assertSame($value->getRemoteId(), $params['resource']->getRemoteId());
+        self::assertSame($value->getType(), $params['resource']->getType());
+        self::assertSame($value->getUrl(), $params['resource']->getUrl());
     }
 
     /**

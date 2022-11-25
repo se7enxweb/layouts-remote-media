@@ -12,7 +12,7 @@ use Netgen\Layouts\Parameters\ParameterBuilderInterface;
 use Netgen\Layouts\Parameters\ParameterType\ChoiceType;
 use Netgen\Layouts\Parameters\ParameterType\TextLineType;
 use Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType;
-use Netgen\RemoteMedia\Core\VariationResolver;
+use Netgen\RemoteMedia\Core\Resolver\Variation as VariationResolver;
 
 final class RemoteMediaHandler extends BlockDefinitionHandler
 {
@@ -87,7 +87,7 @@ final class RemoteMediaHandler extends BlockDefinitionHandler
             '(no variation)' => null,
         ];
 
-        $variations = $this->variationResolver->getVariationsForGroup(self::LAYOUTS_BLOCK_VARIATIONS);
+        $variations = $this->variationResolver->getAvailableVariations(self::LAYOUTS_BLOCK_VARIATIONS);
 
         foreach ($variations as $key => $value) {
             $options[(string) $key] = (string) $key;
