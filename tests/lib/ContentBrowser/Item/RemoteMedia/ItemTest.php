@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\RemoteMedia;
 
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
+use Netgen\Layouts\Tests\Core\Service\TransactionRollback\TestCase;
+use Netgen\RemoteMedia\API\Values\Folder;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
-use PHPUnit\Framework\TestCase;
+use Netgen\RemoteMedia\Core\Provider\Cloudinary\CloudinaryRemoteId;
 
 final class ItemTest extends TestCase
 {
@@ -16,9 +18,11 @@ final class ItemTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resource = RemoteResource::createFromParameters([
-            'resourceId' => 'folder/test_resource',
-            'resourceType' => 'image',
+        $this->resource = new RemoteResource([
+            'remoteId' => 'upload|image|folder/test_resource',
+            'type' => 'image',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            'folder' => Folder::fromPath('folder'),
         ]);
 
         $this->item = new Item($this->resource);
@@ -30,7 +34,7 @@ final class ItemTest extends TestCase
      */
     public function testGetValue(): void
     {
-        self::assertSame('image|folder|test_resource', $this->item->getValue());
+        self::assertSame('image|folder|upload|image|folder|test_resource', $this->item->getValue());
     }
 
     /**
@@ -60,16 +64,29 @@ final class ItemTest extends TestCase
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::getResourceType
      */
-    public function testGetResourceType(): void
+    public function testGetType(): void
     {
-        self::assertSame('image', $this->item->getResourceType());
+        self::assertSame('image', $this->item->getType());
     }
 
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::getRemoteMediaValue
      */
-    public function testGetRemoteMediaValue(): void
+    public function testGetRemoteResource(): void
     {
-        self::assertSame($this->resource, $this->item->getRemoteMediaValue());
+        self::assertSame(
+            $this->resource->getRemoteId(),
+            $this->item->getRemoteResource()->getRemoteId(),
+        );
+
+        self::assertSame(
+            $this->resource->getType(),
+            $this->item->getRemoteResource()->getType(),
+        );
+
+        self::assertSame(
+            $this->resource->getUrl(),
+            $this->item->getRemoteResource()->getUrl(),
+        );
     }
 }

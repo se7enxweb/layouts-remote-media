@@ -71,7 +71,7 @@ final class RemoteMediaBackend implements BackendInterface
         try {
             $resource = $this->provider->getRemoteResource(
                 $query->getResourceId(),
-                $query->getResourceType(),
+                $query->getType(),
             );
         } catch (RemoteResourceNotFoundException $e) {
             throw new NotFoundException(
@@ -97,7 +97,7 @@ final class RemoteMediaBackend implements BackendInterface
 
         $locations = [];
         foreach ($folders as $folder) {
-            $locations[] = Location::createFromFolder($folder['path'], $folder['name'], $location->getResourceType());
+            $locations[] = Location::createFromFolder($folder['path'], $folder['name'], $location->getType());
         }
 
         return $locations;
@@ -120,8 +120,8 @@ final class RemoteMediaBackend implements BackendInterface
             return [];
         }
 
-        $resourceType = $location->getResourceType() !== Location::RESOURCE_TYPE_ALL ?
-            $location->getResourceType()
+        $resourceType = $location->getType() !== Location::RESOURCE_TYPE_ALL ?
+            $location->getType()
             : $this->getAllowedTypes();
 
         $query = new Query(
@@ -164,8 +164,8 @@ final class RemoteMediaBackend implements BackendInterface
             return 0;
         }
 
-        $resourceType = $location->getResourceType() !== Location::RESOURCE_TYPE_ALL ?
-            $location->getResourceType()
+        $resourceType = $location->getType() !== Location::RESOURCE_TYPE_ALL ?
+            $location->getType()
             : $this->getAllowedTypes();
 
         $query = new Query(
@@ -182,8 +182,8 @@ final class RemoteMediaBackend implements BackendInterface
     {
         $resourceType = null;
         if ($searchQuery->getLocation() instanceof Location) {
-            $resourceType = $searchQuery->getLocation()->getResourceType() !== Location::RESOURCE_TYPE_ALL
-                ? $searchQuery->getLocation()->getResourceType()
+            $resourceType = $searchQuery->getLocation()->getType() !== Location::RESOURCE_TYPE_ALL
+                ? $searchQuery->getLocation()->getType()
                 : $this->getAllowedTypes();
         }
 
@@ -225,8 +225,8 @@ final class RemoteMediaBackend implements BackendInterface
         $resourceType = null;
         $folder = null;
         if ($searchQuery->getLocation() instanceof Location) {
-            $resourceType = $searchQuery->getLocation()->getResourceType() !== Location::RESOURCE_TYPE_ALL
-                ? $searchQuery->getLocation()->getResourceType()
+            $resourceType = $searchQuery->getLocation()->getType() !== Location::RESOURCE_TYPE_ALL
+                ? $searchQuery->getLocation()->getType()
                 : $this->getAllowedTypes();
 
             $folder = $searchQuery->getLocation()->getFolder();

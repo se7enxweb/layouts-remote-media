@@ -25,7 +25,7 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
         try {
             return $this->provider->getRemoteResource(
                 $query->getResourceId(),
-                $query->getResourceType(),
+                $query->getType(),
             );
         } catch (RemoteResourceNotFoundException $e) {
             return null;

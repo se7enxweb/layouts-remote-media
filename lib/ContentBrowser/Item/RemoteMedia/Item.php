@@ -9,6 +9,7 @@ use Netgen\RemoteMedia\API\Values\RemoteResource;
 
 use function array_pop;
 use function explode;
+use function implode;
 use function str_replace;
 
 final class Item implements ItemInterface
@@ -22,12 +23,16 @@ final class Item implements ItemInterface
 
     public function getValue(): string
     {
-        return $this->getResourceType() . '|' . str_replace('/', '|', $this->resource->resourceId);
+        return implode('|', [
+            $this->resource->getType(),
+            str_replace('/', '|', $this->resource->getFolder()),
+            str_replace('/', '|', $this->resource->getRemoteId()),
+        ]);
     }
 
     public function getName(): string
     {
-        $parts = explode('/', $this->resource->resourceId);
+        $parts = explode('/', $this->resource->getRemoteId());
 
         return array_pop($parts);
     }
@@ -42,12 +47,12 @@ final class Item implements ItemInterface
         return true;
     }
 
-    public function getResourceType(): string
+    public function getType(): string
     {
-        return $this->resource->resourceType;
+        return $this->resource->getType();
     }
 
-    public function getRemoteMediaValue(): RemoteResource
+    public function getRemoteResource(): RemoteResource
     {
         return $this->resource;
     }

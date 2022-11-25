@@ -29,8 +29,8 @@ final class ResourceQueryTest extends TestCase
     /**
      * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery::getResourceType
      */
-    public function testGetResourceType(): void
+    public function testgetType(): void
     {
-        self::assertSame('image', $this->resourceQuery->getResourceType());
+        self::assertSame('image', $this->resourceQuery->getType());
     }
 }

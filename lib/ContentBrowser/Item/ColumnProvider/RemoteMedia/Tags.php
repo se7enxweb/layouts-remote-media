@@ -19,10 +19,10 @@ final class Tags implements ColumnValueProviderInterface
             return null;
         }
 
-        if (!array_key_exists('tags', $item->getRemoteMediaValue()->metaData)) {
+        if (!array_key_exists('tags', $item->getRemoteResource()->metaData)) {
             return '';
         }
 
-        return implode(', ', $item->getRemoteMediaValue()->metaData['tags']);
+        return implode(', ', $item->getRemoteResource()->metaData['tags']);
     }
 }

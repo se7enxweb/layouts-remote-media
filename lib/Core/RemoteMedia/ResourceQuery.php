@@ -34,7 +34,7 @@ final class ResourceQuery
         return $this->resourceId;
     }
 
-    public function getResourceType(): string
+    public function getType(): string
     {
         return $this->resourceType;
     }

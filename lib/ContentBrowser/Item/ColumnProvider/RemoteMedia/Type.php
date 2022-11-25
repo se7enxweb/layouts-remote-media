@@ -16,11 +16,11 @@ final class Type implements ColumnValueProviderInterface
             return null;
         }
 
-        $value = $item->getRemoteMediaValue()->resourceType;
-        $format = $item->getRemoteMediaValue()->metaData['format'] ?? '';
+        $value = $item->getRemoteResource()->resourceType;
+        $format = $item->getRemoteResource()->metaData['format'] ?? '';
 
         if ($format !== '') {
-            $value .= ' / ' . $item->getRemoteMediaValue()->metaData['format'];
+            $value .= ' / ' . $item->getRemoteResource()->metaData['format'];
         }
 
         return $value;

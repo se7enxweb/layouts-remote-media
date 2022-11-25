@@ -6,6 +6,7 @@ namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\RemoteMedia;
 
 use InvalidArgumentException;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
+use Netgen\RemoteMedia\API\Values\Folder;
 use PHPUnit\Framework\TestCase;
 
 final class LocationTest extends TestCase
@@ -19,7 +20,7 @@ final class LocationTest extends TestCase
     protected function setUp(): void
     {
         $this->sectionLocation = Location::createAsSection('all', 'All items');
-        $this->folderLocation = Location::createFromFolder('some/folder/path', 'path', 'image');
+        $this->folderLocation = Location::createFromFolder(Folder::fromPath('some/folder/path'), 'image');
         $this->location = Location::createFromId('video|some|folder|path');
     }
 
@@ -63,18 +64,18 @@ final class LocationTest extends TestCase
     public function testGetFolder(): void
     {
         self::assertNull($this->sectionLocation->getFolder());
-        self::assertSame('some/folder/path', $this->folderLocation->getFolder());
-        self::assertSame('some/folder/path', $this->location->getFolder());
+        self::assertSame('some/folder/path', $this->folderLocation->getFolder()->getPath());
+        self::assertSame('some/folder/path', $this->location->getFolder()->getPath());
     }
 
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location::getResourceType
      */
-    public function testGetResourceType(): void
+    public function testgetType(): void
     {
-        self::assertSame('all', $this->sectionLocation->getResourceType());
-        self::assertSame('image', $this->folderLocation->getResourceType());
-        self::assertSame('video', $this->location->getResourceType());
+        self::assertSame('all', $this->sectionLocation->getType());
+        self::assertSame('image', $this->folderLocation->getType());
+        self::assertSame('video', $this->location->getType());
     }
 
     /**
@@ -94,7 +95,7 @@ final class LocationTest extends TestCase
     public function testAsSectionWithInvalidResourceType(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Provided resource type unsupported_resource_type is invalid');
+        $this->expectExceptionMessage('Provided type unsupported_resource_type is invalid');
 
         Location::createAsSection('unsupported_resource_type', 'Unsupported resource type');
     }

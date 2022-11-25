@@ -45,13 +45,13 @@ final class RemoteMediaValidator extends ConstraintValidator
         try {
             $this->provider->getRemoteResource(
                 $query->getResourceId(),
-                $query->getResourceType(),
+                $query->getType(),
             );
         } catch (RemoteResourceNotFoundException $e) {
             $this->context
                 ->buildViolation($constraint->message)
                 ->setParameter('%resourceId%', $query->getResourceId())
-                ->setParameter('%resourceType%', $query->getResourceType())
+                ->setParameter('%resourceType%', $query->getType())
                 ->addViolation();
         }
     }
