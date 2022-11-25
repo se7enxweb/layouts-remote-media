@@ -20,11 +20,16 @@ final class SizeTest extends TestCase
 
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::getValue
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::prettyBytes
      */
     public function testGetValueInB(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
-        $resource->size = 586;
+        $resource = new RemoteResource([
+            'remoteId' => 'folder/test_resource',
+            'type' => 'image',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            'size' => 586,
+        ]);
 
         $item = new RemoteMediaItem($resource);
 
@@ -33,11 +38,16 @@ final class SizeTest extends TestCase
 
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::getValue
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::prettyBytes
      */
     public function testGetValueInkB(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
-        $resource->size = 1086;
+        $resource = new RemoteResource([
+            'remoteId' => 'folder/test_resource',
+            'type' => 'image',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            'size' => 1086,
+        ]);
 
         $item = new RemoteMediaItem($resource);
 
@@ -46,11 +56,16 @@ final class SizeTest extends TestCase
 
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::getValue
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::prettyBytes
      */
     public function testGetValueInMB(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
-        $resource->size = 269840548;
+        $resource = new RemoteResource([
+            'remoteId' => 'folder/test_resource',
+            'type' => 'image',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            'size' => 269840548,
+        ]);
 
         $item = new RemoteMediaItem($resource);
 
@@ -59,11 +74,16 @@ final class SizeTest extends TestCase
 
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::getValue
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::prettyBytes
      */
     public function testGetValueInGB(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
-        $resource->size = 269840548462;
+        $resource = new RemoteResource([
+            'remoteId' => 'folder/test_resource',
+            'type' => 'image',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            'size' => 269840548462,
+        ]);
 
         $item = new RemoteMediaItem($resource);
 
@@ -72,11 +92,16 @@ final class SizeTest extends TestCase
 
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::getValue
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::prettyBytes
      */
     public function testGetValueInTB(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
-        $resource->size = 269840548462634;
+        $resource = new RemoteResource([
+            'remoteId' => 'folder/test_resource',
+            'type' => 'image',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            'size' => 269840548462634,
+        ]);
 
         $item = new RemoteMediaItem($resource);
 
@@ -85,11 +110,16 @@ final class SizeTest extends TestCase
 
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::getValue
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::prettyBytes
      */
     public function testGetValueInPB(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
-        $resource->size = 269840548462634154;
+        $resource = new RemoteResource([
+            'remoteId' => 'folder/test_resource',
+            'type' => 'image',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            'size' => 269840548462634154,
+        ]);
 
         $item = new RemoteMediaItem($resource);
 
@@ -98,10 +128,16 @@ final class SizeTest extends TestCase
 
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::getValue
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::prettyBytes
      */
     public function testGetValueWithNoSize(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
+        $resource = new RemoteResource([
+            'remoteId' => 'folder/test_resource',
+            'type' => 'image',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+        ]);
+
         $item = new RemoteMediaItem($resource);
 
         self::assertSame('0B', $this->sizeColumn->getValue($item));

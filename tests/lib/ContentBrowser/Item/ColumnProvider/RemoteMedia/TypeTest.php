@@ -23,7 +23,12 @@ final class TypeTest extends TestCase
      */
     public function testGetValue(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
+        $resource = new RemoteResource([
+            'remoteId' => 'folder/test_resource',
+            'type' => 'image',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+        ]);
+
         $item = new RemoteMediaItem($resource);
 
         self::assertSame('image', $this->typeColumn->getValue($item));
@@ -34,26 +39,15 @@ final class TypeTest extends TestCase
      */
     public function testGetValueWithFormat(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
-        $resource->resourceType = 'video';
-        $resource->metaData['format'] = 'mp4';
+        $resource = new RemoteResource([
+            'remoteId' => 'folder/test_resource',
+            'type' => 'video',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            'metadata' => ['format' => 'mp4'],
+        ]);
 
         $item = new RemoteMediaItem($resource);
 
         self::assertSame('video / mp4', $this->typeColumn->getValue($item));
-    }
-
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Type::getValue
-     */
-    public function testGetValueWithoutFormatKey(): void
-    {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
-        $resource->resourceType = 'video';
-        unset($resource->metaData['format']);
-
-        $item = new RemoteMediaItem($resource);
-
-        self::assertSame('video', $this->typeColumn->getValue($item));
     }
 }

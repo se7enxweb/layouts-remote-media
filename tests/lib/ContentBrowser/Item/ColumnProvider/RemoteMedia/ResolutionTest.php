@@ -23,9 +23,15 @@ final class ResolutionTest extends TestCase
      */
     public function testGetValue(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
-        $resource->metaData['width'] = 1920;
-        $resource->metaData['height'] = 1080;
+        $resource = new RemoteResource([
+            'remoteId' => 'folder/test_resource',
+            'type' => 'image',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            'metadata' => [
+                'width' => 1920,
+                'height' => 1080,
+            ],
+        ]);
 
         $item = new RemoteMediaItem($resource);
 
@@ -37,8 +43,15 @@ final class ResolutionTest extends TestCase
      */
     public function testGetValueWithEmptyWidth(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
-        $resource->metaData['width'] = 1920;
+        $resource = new RemoteResource([
+            'remoteId' => 'folder/test_resource',
+            'type' => 'image',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            'metadata' => [
+                'width' => '',
+                'height' => 1080,
+            ],
+        ]);
 
         $item = new RemoteMediaItem($resource);
 
@@ -50,8 +63,15 @@ final class ResolutionTest extends TestCase
      */
     public function testGetValueWithEmptyHeight(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
-        $resource->metaData['height'] = 1080;
+        $resource = new RemoteResource([
+            'remoteId' => 'folder/test_resource',
+            'type' => 'image',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            'metadata' => [
+                'width' => 1920,
+                'height' => '',
+            ],
+        ]);
 
         $item = new RemoteMediaItem($resource);
 
@@ -63,8 +83,11 @@ final class ResolutionTest extends TestCase
      */
     public function testGetValueWithMissingKeys(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
-        unset($resource->metaData['width'], $resource->metaData['height']);
+        $resource = new RemoteResource([
+            'remoteId' => 'folder/test_resource',
+            'type' => 'image',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+        ]);
 
         $item = new RemoteMediaItem($resource);
 

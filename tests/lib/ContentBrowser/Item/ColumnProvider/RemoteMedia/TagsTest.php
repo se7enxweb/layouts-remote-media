@@ -23,8 +23,12 @@ final class TagsTest extends TestCase
      */
     public function testGetValue(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
-        $resource->metaData['tags'] = ['tag1', 'tag2', 'tag3'];
+        $resource = new RemoteResource([
+            'remoteId' => 'folder/test_resource',
+            'type' => 'image',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            'tags' => ['tag1', 'tag2', 'tag3'],
+        ]);
 
         $item = new RemoteMediaItem($resource);
 
@@ -34,22 +38,13 @@ final class TagsTest extends TestCase
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Tags::getValue
      */
-    public function testGetValueWithMissingTagsKey(): void
-    {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
-        unset($resource->metaData['tags']);
-
-        $item = new RemoteMediaItem($resource);
-
-        self::assertSame('', $this->tagsColumn->getValue($item));
-    }
-
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Tags::getValue
-     */
     public function testGetValueWithNoTags(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
+        $resource = new RemoteResource([
+            'remoteId' => 'folder/test_resource',
+            'type' => 'image',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+        ]);
 
         $item = new RemoteMediaItem($resource);
 
