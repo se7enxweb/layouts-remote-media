@@ -25,8 +25,8 @@ final class Item implements ItemInterface
     {
         return implode('|', [
             $this->resource->getType(),
-            str_replace('/', '|', $this->resource->getFolder()),
-            str_replace('/', '|', $this->resource->getRemoteId()),
+            urlencode((string) $this->resource->getFolder()),
+            urlencode($this->resource->getRemoteId()),
         ]);
     }
 

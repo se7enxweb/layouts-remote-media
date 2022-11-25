@@ -8,7 +8,6 @@ use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 use Netgen\Layouts\Tests\Core\Service\TransactionRollback\TestCase;
 use Netgen\RemoteMedia\API\Values\Folder;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
-use Netgen\RemoteMedia\Core\Provider\Cloudinary\CloudinaryRemoteId;
 
 final class ItemTest extends TestCase
 {
@@ -34,7 +33,7 @@ final class ItemTest extends TestCase
      */
     public function testGetValue(): void
     {
-        self::assertSame('image|folder|upload|image|folder|test_resource', $this->item->getValue());
+        self::assertSame('image|folder|upload%7Cimage%7Cfolder%2Ftest_resource', $this->item->getValue());
     }
 
     /**
