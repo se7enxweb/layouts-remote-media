@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\Tests\Validator;
 
 use Netgen\Layouts\RemoteMedia\Validator\RemoteMediaValidator;
-use Netgen\RemoteMedia\Core\RemoteMediaProvider;
+use Netgen\RemoteMedia\API\ProviderInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidatorFactory;
 use Symfony\Component\Validator\ConstraintValidatorFactoryInterface;
@@ -13,11 +13,11 @@ use Symfony\Component\Validator\ConstraintValidatorInterface;
 
 final class RemoteMediaValidatorFactory implements ConstraintValidatorFactoryInterface
 {
-    private RemoteMediaProvider $provider;
+    private ProviderInterface $provider;
 
     private ConstraintValidatorFactory $baseValidatorFactory;
 
-    public function __construct(RemoteMediaProvider $provider)
+    public function __construct(ProviderInterface $provider)
     {
         $this->provider = $provider;
         $this->baseValidatorFactory = new ConstraintValidatorFactory();

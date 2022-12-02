@@ -6,7 +6,7 @@ namespace Netgen\Layouts\RemoteMedia\Validator;
 
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
 use Netgen\Layouts\RemoteMedia\Validator\Constraint\RemoteMedia;
-use Netgen\RemoteMedia\Core\RemoteMediaProvider;
+use Netgen\RemoteMedia\API\ProviderInterface;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -16,9 +16,9 @@ use function is_string;
 
 final class RemoteMediaValidator extends ConstraintValidator
 {
-    private RemoteMediaProvider $provider;
+    private ProviderInterface $provider;
 
-    public function __construct(RemoteMediaProvider $provider)
+    public function __construct(ProviderInterface $provider)
     {
         $this->provider = $provider;
     }
@@ -43,15 +43,11 @@ final class RemoteMediaValidator extends ConstraintValidator
         $query = ResourceQuery::createFromString($value);
 
         try {
-            $this->provider->getRemoteResource(
-                $query->getResourceId(),
-                $query->getType(),
-            );
+            $this->provider->loadByRemoteId($query->getRemoteId());
         } catch (RemoteResourceNotFoundException $e) {
             $this->context
                 ->buildViolation($constraint->message)
-                ->setParameter('%resourceId%', $query->getResourceId())
-                ->setParameter('%resourceType%', $query->getType())
+                ->setParameter('%remoteId%', $query->getRemoteId())
                 ->addViolation();
         }
     }

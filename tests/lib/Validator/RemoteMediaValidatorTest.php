@@ -8,7 +8,7 @@ use Netgen\Layouts\RemoteMedia\Validator\Constraint\RemoteMedia;
 use Netgen\Layouts\RemoteMedia\Validator\RemoteMediaValidator;
 use Netgen\Layouts\Tests\TestCase\ValidatorTestCase;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
-use Netgen\RemoteMedia\Core\RemoteMediaProvider;
+use Netgen\RemoteMedia\API\ProviderInterface;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -28,7 +28,7 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
 
     public function getValidator(): ConstraintValidatorInterface
     {
-        $this->provider = $this->createMock(RemoteMediaProvider::class);
+        $this->provider = $this->createMock(ProviderInterface::class);
 
         return new RemoteMediaValidator($this->provider);
     }
@@ -41,11 +41,15 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
     {
         $this->provider
             ->expects(self::once())
-            ->method('getRemoteResource')
-            ->with(self::identicalTo('folder/test_resource'), self::identicalTo('image'))
-            ->willReturn(RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']));
+            ->method('loadByRemoteId')
+            ->with(self::identicalTo('upload|image|folder/test_resource'))
+            ->willReturn(new RemoteResource([
+                'type' => RemoteResource::TYPE_IMAGE,
+                'remoteId' => 'upload|image|folder/test_resource',
+                'url' => 'https://cloudinary.com/test/upload/image/test_resource',
+            ]));
 
-        $this->assertValid(true, 'image|folder|test_resource');
+        $this->assertValid(true, 'image|folder|upload%7Cimage%7Cfolder%2Ftest_resource');
     }
 
     /**
@@ -56,7 +60,7 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
     {
         $this->provider
             ->expects(self::never())
-            ->method('getRemoteResource');
+            ->method('loadByRemoteId');
 
         $this->assertValid(true, null);
     }
@@ -69,11 +73,11 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
     {
         $this->provider
             ->expects(self::once())
-            ->method('getRemoteResource')
-            ->with(self::identicalTo('folder/test_resource'), self::identicalTo('image'))
-            ->willThrowException(new RemoteResourceNotFoundException('folder/test_resource', 'image'));
+            ->method('loadByRemoteId')
+            ->with(self::identicalTo('upload|image|folder/test_resource2'))
+            ->willThrowException(new RemoteResourceNotFoundException('upload|image|folder/test_resource2'));
 
-        $this->assertValid(false, 'image|folder|test_resource');
+        $this->assertValid(false, 'image|folder|upload%7Cimage%7Cfolder%2Ftest_resource2');
     }
 
     /**

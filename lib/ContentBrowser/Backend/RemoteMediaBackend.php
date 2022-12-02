@@ -15,11 +15,12 @@ use Netgen\ContentBrowser\Item\LocationInterface;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
-use Netgen\RemoteMedia\API\NextCursorResolverInterface;
+use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolver;
 use Netgen\RemoteMedia\API\Search\Query;
-use Netgen\RemoteMedia\Core\RemoteMediaProvider;
+use Netgen\RemoteMedia\API\ProviderInterface;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 
+use Symfony\Contracts\Translation\TranslatorInterface;
 use function count;
 use function explode;
 use function in_array;
@@ -28,24 +29,18 @@ use function sprintf;
 
 final class RemoteMediaBackend implements BackendInterface
 {
-    private RemoteMediaProvider $provider;
+    private ProviderInterface $provider;
 
-    private NextCursorResolverInterface $nextCursorResolver;
+    private NextCursorResolver $nextCursorResolver;
 
-    /**
-     * @var \Symfony\Contracts\Translation\TranslatorInterface
-     */
-    private $translator;
+    private TranslatorInterface $translator;
 
     private Configuration $config;
 
-    /**
-     * @param \Symfony\Contracts\Translation\TranslatorInterface $translator
-     */
     public function __construct(
-        RemoteMediaProvider $provider,
-        NextCursorResolverInterface $nextCursorResolver,
-        $translator,
+        ProviderInterface $provider,
+        NextCursorResolver $nextCursorResolver,
+        TranslatorInterface $translator,
         Configuration $config
     ) {
         $this->provider = $provider;
@@ -69,7 +64,7 @@ final class RemoteMediaBackend implements BackendInterface
         $query = ResourceQuery::createFromString((string) $value);
 
         try {
-            $resource = $this->provider->getRemoteResource(
+            $resource = $this->provider->loadByRemoteId(
                 $query->getResourceId(),
                 $query->getType(),
             );
