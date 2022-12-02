@@ -25,7 +25,11 @@ final class RemoteMediaValueConverterTest extends TestCase
     {
         self::assertTrue(
             $this->valueConverter->supports(
-                RemoteResource::createFromParameters(['resourceId' => 'test_resource']),
+                new RemoteResource([
+                    'type' => 'image',
+                    'remoteId' => 'upload|image|folder/test_resource',
+                    'url' => 'https://cloudinary.com/test/upload/folder/test_resource',
+                ]),
             ),
         );
 
@@ -40,7 +44,11 @@ final class RemoteMediaValueConverterTest extends TestCase
         self::assertSame(
             'remote_media',
             $this->valueConverter->getValueType(
-                RemoteResource::createFromParameters(['resourceId' => 'test_resource']),
+                new RemoteResource([
+                    'type' => 'image',
+                    'remoteId' => 'upload|image|folder/test_resource',
+                    'url' => 'https://cloudinary.com/test/upload/folder/test_resource',
+                ]),
             ),
         );
     }
@@ -51,9 +59,13 @@ final class RemoteMediaValueConverterTest extends TestCase
     public function testGetId(): void
     {
         self::assertSame(
-            'folder/test_resource',
+            'upload|image|folder/test_resource',
             $this->valueConverter->getId(
-                RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']),
+                new RemoteResource([
+                    'type' => 'image',
+                    'remoteId' => 'upload|image|folder/test_resource',
+                    'url' => 'https://cloudinary.com/test/upload/folder/test_resource',
+                ]),
             ),
         );
     }
@@ -64,9 +76,13 @@ final class RemoteMediaValueConverterTest extends TestCase
     public function testGetRemoteId(): void
     {
         self::assertSame(
-            'folder/test_resource',
+            'upload|image|folder/test_resource',
             $this->valueConverter->getRemoteId(
-                RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']),
+                new RemoteResource([
+                    'type' => 'image',
+                    'remoteId' => 'upload|image|folder/test_resource',
+                    'url' => 'https://cloudinary.com/test/upload/folder/test_resource',
+                ]),
             ),
         );
     }
@@ -79,7 +95,11 @@ final class RemoteMediaValueConverterTest extends TestCase
         self::assertSame(
             'test_resource',
             $this->valueConverter->getName(
-                RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']),
+                new RemoteResource([
+                    'type' => 'image',
+                    'remoteId' => 'upload|image|folder/test_resource',
+                    'url' => 'https://cloudinary.com/test/upload/folder/test_resource',
+                ]),
             ),
         );
     }
@@ -91,7 +111,11 @@ final class RemoteMediaValueConverterTest extends TestCase
     {
         self::assertTrue(
             $this->valueConverter->getIsVisible(
-                RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']),
+                new RemoteResource([
+                    'type' => 'image',
+                    'remoteId' => 'upload|image|folder/test_resource',
+                    'url' => 'https://cloudinary.com/test/upload/folder/test_resource',
+                ]),
             ),
         );
     }
@@ -101,7 +125,11 @@ final class RemoteMediaValueConverterTest extends TestCase
      */
     public function testGetObject(): void
     {
-        $object = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
+        $object =  new RemoteResource([
+            'type' => 'image',
+            'remoteId' => 'upload|image|folder/test_resource',
+            'url' => 'https://cloudinary.com/test/upload/folder/test_resource',
+        ]);
 
         self::assertSame($object, $this->valueConverter->getObject($object));
     }

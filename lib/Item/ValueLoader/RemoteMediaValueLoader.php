@@ -6,14 +6,14 @@ namespace Netgen\Layouts\RemoteMedia\Item\ValueLoader;
 
 use Netgen\Layouts\Item\ValueLoaderInterface;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
-use Netgen\RemoteMedia\Core\RemoteMediaProvider;
+use Netgen\RemoteMedia\API\ProviderInterface;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 
 final class RemoteMediaValueLoader implements ValueLoaderInterface
 {
-    private RemoteMediaProvider $provider;
+    private ProviderInterface $provider;
 
-    public function __construct(RemoteMediaProvider $provider)
+    public function __construct(ProviderInterface $provider)
     {
         $this->provider = $provider;
     }
@@ -23,10 +23,7 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
         $query = ResourceQuery::createFromString((string) $id);
 
         try {
-            return $this->provider->getRemoteResource(
-                $query->getResourceId(),
-                $query->getType(),
-            );
+            return $this->provider->loadByRemoteId($query->getRemoteId());
         } catch (RemoteResourceNotFoundException $e) {
             return null;
         }

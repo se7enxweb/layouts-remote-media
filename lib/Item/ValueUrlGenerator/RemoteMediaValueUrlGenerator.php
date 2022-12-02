@@ -13,6 +13,6 @@ final class RemoteMediaValueUrlGenerator implements ValueUrlGeneratorInterface
 {
     public function generate(object $object): ?string
     {
-        return $object->secure_url;
+        return $object->getUrl();
     }
 }

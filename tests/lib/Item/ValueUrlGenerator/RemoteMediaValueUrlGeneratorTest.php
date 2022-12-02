@@ -22,12 +22,12 @@ final class RemoteMediaValueUrlGeneratorTest extends TestCase
      */
     public function testGenerate(): void
     {
-        $resource = RemoteResource::createFromParameters([
-            'resourceId' => 'folder/test_resource',
-            'resourceType' => 'video',
+        $resource = new RemoteResource([
+            'type' => RemoteResource::TYPE_VIDEO,
+            'remoteId' => 'upload|video|folder/test_resource',
+            'url' => 'https://cloudinary.com/test/upload/video/folder/test_resource',
         ]);
-        $resource->secure_url = 'https://cloudinary.com/test/folder/test_resource';
 
-        self::assertSame('https://cloudinary.com/test/folder/test_resource', $this->urlGenerator->generate($resource));
+        self::assertSame('https://cloudinary.com/test/upload/video/folder/test_resource', $this->urlGenerator->generate($resource));
     }
 }

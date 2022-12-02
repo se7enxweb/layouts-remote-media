@@ -6,7 +6,7 @@ namespace Netgen\Layouts\RemoteMedia\Tests\Item\ValueLoader;
 
 use Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
-use Netgen\RemoteMedia\Core\RemoteMediaProvider;
+use Netgen\RemoteMedia\API\ProviderInterface;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +19,7 @@ final class RemoteMediaValueLoaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->providerMock = $this->createMock(RemoteMediaProvider::class);
+        $this->providerMock = $this->createMock(ProviderInterface::class);
 
         $this->valueLoader = new RemoteMediaValueLoader($this->providerMock);
     }
@@ -30,18 +30,19 @@ final class RemoteMediaValueLoaderTest extends TestCase
      */
     public function testLoad(): void
     {
-        $resource = RemoteResource::createFromParameters([
-            'resourceId' => 'folder/test_resource',
-            'resourceType' => 'video',
+        $resource = new RemoteResource([
+            'type' => RemoteResource::TYPE_VIDEO,
+            'remoteId' => 'upload|video|folder/test_resource',
+            'url' => 'https://cloudinary.com/test/upload/video/folder/test_resource',
         ]);
 
         $this->providerMock
             ->expects(self::once())
-            ->method('getRemoteResource')
-            ->with('folder/test_resource', 'video')
+            ->method('loadByRemoteId')
+            ->with('upload|video|folder/test_resource')
             ->willReturn($resource);
 
-        self::assertSame($resource, $this->valueLoader->load('video|folder|test_resource'));
+        self::assertSame($resource, $this->valueLoader->load('video|folder|upload%7Cvideo%7Cfolder%2Ftest_resource'));
     }
 
     /**
@@ -51,13 +52,13 @@ final class RemoteMediaValueLoaderTest extends TestCase
     {
         $this->providerMock
             ->expects(self::once())
-            ->method('getRemoteResource')
-            ->with('folder/test_resource', 'video')
+            ->method('loadByRemoteId')
+            ->with('upload|video|folder/test_resource')
             ->willThrowException(
-                new RemoteResourceNotFoundException('folder/test_resource', 'video'),
+                new RemoteResourceNotFoundException('upload|video|folder/test_resource'),
             );
 
-        self::assertNull($this->valueLoader->load('video|folder|test_resource'));
+        self::assertNull($this->valueLoader->load('video|folder|upload%7Cvideo%7Cfolder%2Ftest_resource'));
     }
 
     /**
@@ -65,18 +66,19 @@ final class RemoteMediaValueLoaderTest extends TestCase
      */
     public function testLoadByRemoteId(): void
     {
-        $resource = RemoteResource::createFromParameters([
-            'resourceId' => 'folder/test_resource',
-            'resourceType' => 'video',
+        $resource = new RemoteResource([
+            'type' => RemoteResource::TYPE_VIDEO,
+            'remoteId' => 'upload|video|folder/test_resource',
+            'url' => 'https://cloudinary.com/test/upload/video/folder/test_resource',
         ]);
 
         $this->providerMock
             ->expects(self::once())
-            ->method('getRemoteResource')
-            ->with('folder/test_resource', 'video')
+            ->method('loadByRemoteId')
+            ->with('upload|video|folder/test_resource')
             ->willReturn($resource);
 
-        self::assertSame($resource, $this->valueLoader->loadByRemoteId('video|folder|test_resource'));
+        self::assertSame($resource, $this->valueLoader->loadByRemoteId('video|folder|upload%7Cvideo%7Cfolder%2Ftest_resource'));
     }
 
     /**
@@ -86,12 +88,12 @@ final class RemoteMediaValueLoaderTest extends TestCase
     {
         $this->providerMock
             ->expects(self::once())
-            ->method('getRemoteResource')
-            ->with('folder/test_resource', 'video')
+            ->method('loadByRemoteId')
+            ->with('upload|video|folder/test_resource')
             ->willThrowException(
-                new RemoteResourceNotFoundException('folder/test_resource', 'video'),
+                new RemoteResourceNotFoundException('upload|video|folder/test_resource'),
             );
 
-        self::assertNull($this->valueLoader->loadByRemoteId('video|folder|test_resource'));
+        self::assertNull($this->valueLoader->loadByRemoteId('video|folder|upload%7Cvideo%7Cfolder%2Ftest_resource'));
     }
 }
