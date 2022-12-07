@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\Tests\Core\RemoteMedia;
 
 use Netgen\RemoteMedia\API\Search\Query;
-use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolver;
+use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolverInterface;
+use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor as NextCursorResolver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
@@ -22,7 +23,7 @@ final class NextCursorResolverTest extends TestCase
 
     private MockObject $cache;
 
-    private NextCursorResolver $resolver;
+    private NextCursorResolverInterface $resolver;
 
     protected function setUp(): void
     {
@@ -32,9 +33,9 @@ final class NextCursorResolverTest extends TestCase
     }
 
     /**
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolver::getCacheKey
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolver::resolve
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolver::washKey
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::getCacheKey
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::resolve
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::washKey
      */
     public function testResolve(): void
     {
@@ -60,9 +61,9 @@ final class NextCursorResolverTest extends TestCase
     }
 
     /**
-     * @covers \Netgen\RemoteMedia\Core\NextCursorResolver::getCacheKey
-     * @covers \Netgen\RemoteMedia\Core\NextCursorResolver::resolve
-     * @covers \Netgen\RemoteMedia\Core\NextCursorResolver::washKey
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::getCacheKey
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::resolve
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::washKey
      */
     public function testResolveWithoutMatch(): void
     {
@@ -86,9 +87,9 @@ final class NextCursorResolverTest extends TestCase
     }
 
     /**
-     * @covers \Netgen\RemoteMedia\Core\NextCursorResolver::getCacheKey
-     * @covers \Netgen\RemoteMedia\Core\NextCursorResolver::save
-     * @covers \Netgen\RemoteMedia\Core\NextCursorResolver::washKey
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::getCacheKey
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::save
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::washKey
      */
     public function testSave(): void
     {

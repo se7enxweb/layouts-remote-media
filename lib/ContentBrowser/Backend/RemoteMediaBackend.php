@@ -15,9 +15,10 @@ use Netgen\ContentBrowser\Item\LocationInterface;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
-use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolver;
+use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolverInterface;
 use Netgen\RemoteMedia\API\Search\Query;
 use Netgen\RemoteMedia\API\ProviderInterface;
+use Netgen\RemoteMedia\API\Values\Folder;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -31,7 +32,7 @@ final class RemoteMediaBackend implements BackendInterface
 {
     private ProviderInterface $provider;
 
-    private NextCursorResolver $nextCursorResolver;
+    private NextCursorResolverInterface $nextCursorResolver;
 
     private TranslatorInterface $translator;
 
@@ -39,7 +40,7 @@ final class RemoteMediaBackend implements BackendInterface
 
     public function __construct(
         ProviderInterface $provider,
-        NextCursorResolver $nextCursorResolver,
+        NextCursorResolverInterface $nextCursorResolver,
         TranslatorInterface $translator,
         Configuration $config
     ) {
@@ -64,10 +65,7 @@ final class RemoteMediaBackend implements BackendInterface
         $query = ResourceQuery::createFromString((string) $value);
 
         try {
-            $resource = $this->provider->loadByRemoteId(
-                $query->getResourceId(),
-                $query->getType(),
-            );
+            $resource = $this->provider->loadByRemoteId($query->getRemoteId());
         } catch (RemoteResourceNotFoundException $e) {
             throw new NotFoundException(
                 sprintf(
@@ -86,13 +84,11 @@ final class RemoteMediaBackend implements BackendInterface
             return [];
         }
 
-        $folders = $location->getFolder() !== null
-            ? $this->provider->listSubFolders($location->getFolder())
-            : $this->provider->listFolders();
+        $folders = $this->provider->listFolders($location->getFolder());
 
         $locations = [];
         foreach ($folders as $folder) {
-            $locations[] = Location::createFromFolder($folder['path'], $folder['name'], $location->getType());
+            $locations[] = Location::createFromFolder($folder, $location->getType());
         }
 
         return $locations;
@@ -104,9 +100,7 @@ final class RemoteMediaBackend implements BackendInterface
             return 0;
         }
 
-        return $location->getFolder() !== null
-            ? count($this->provider->listSubFolders($location->getFolder()))
-            : count($this->provider->listFolders());
+        return count($this->provider->listFolders($location->getFolder()));
     }
 
     public function getSubItems(LocationInterface $location, int $offset = 0, int $limit = 25): iterable
@@ -115,31 +109,23 @@ final class RemoteMediaBackend implements BackendInterface
             return [];
         }
 
-        $resourceType = $location->getType() !== Location::RESOURCE_TYPE_ALL ?
-            $location->getType()
+        $types = $location->getType() !== Location::RESOURCE_TYPE_ALL ?
+             [$location->getType()]
             : $this->getAllowedTypes();
 
-        $query = new Query(
-            '',
-            $resourceType,
-            $limit,
-            $location->getFolder(),
-        );
+        $query = new Query([
+            'types' => $types,
+            'limit' => $limit,
+            'folders' => $location->getFolder() instanceof Folder ? [$location->getFolder()] : [],
+        ]);
 
         if ($offset > 0) {
             $nextCursor = $this->nextCursorResolver->resolve($query, $offset);
 
-            $query = new Query(
-                '',
-                $resourceType,
-                $limit,
-                $location->getFolder(),
-                null,
-                $nextCursor,
-            );
+            $query->setNextCursor($nextCursor);
         }
 
-        $result = $this->provider->searchResources($query);
+        $result = $this->provider->search($query);
 
         if (is_string($result->getNextCursor())) {
             $this->nextCursorResolver->save($query, $offset + $limit, $result->getNextCursor());
@@ -159,49 +145,47 @@ final class RemoteMediaBackend implements BackendInterface
             return 0;
         }
 
-        $resourceType = $location->getType() !== Location::RESOURCE_TYPE_ALL ?
-            $location->getType()
+        $types = $location->getType() !== Location::RESOURCE_TYPE_ALL ?
+            [$location->getType()]
             : $this->getAllowedTypes();
 
-        $query = new Query(
-            '',
-            $resourceType,
-            0,
-            $location->getFolder(),
-        );
+        $query = new Query([
+            'types' => $types,
+            'limit' => 0,
+            'folders' => $location->getFolder() instanceof Folder ? [$location->getFolder()] : [],
+        ]);
 
-        return $this->provider->searchResourcesCount($query);
+        return $this->provider->searchCount($query);
     }
 
     public function searchItems(SearchQuery $searchQuery): SearchResultInterface
     {
-        $resourceType = null;
+        $types = $this->getAllowedTypes();
+        $folders = [];
         if ($searchQuery->getLocation() instanceof Location) {
-            $resourceType = $searchQuery->getLocation()->getType() !== Location::RESOURCE_TYPE_ALL
-                ? $searchQuery->getLocation()->getType()
+            $types = $searchQuery->getLocation()->getType() !== Location::RESOURCE_TYPE_ALL
+                ? [$searchQuery->getLocation()->getType()]
                 : $this->getAllowedTypes();
+
+            $folders = $searchQuery->getLocation()->getFolder() instanceof Folder
+                ? [$searchQuery->getLocation()->getFolder()]
+                : [];
         }
 
-        $query = new Query(
-            $searchQuery->getSearchText(),
-            $resourceType,
-            $searchQuery->getLimit(),
-        );
+        $query = new Query([
+            'query' => $searchQuery->getSearchText(),
+            'types' => $types,
+            'folders' => $folders,
+            'limit' => $searchQuery->getLimit(),
+        ]);
 
         if ($searchQuery->getOffset() > 0) {
             $nextCursor = $this->nextCursorResolver->resolve($query, $searchQuery->getOffset());
 
-            $query = new Query(
-                $searchQuery->getSearchText(),
-                $resourceType,
-                $searchQuery->getLimit(),
-                null,
-                null,
-                $nextCursor,
-            );
+            $query->setNextCursor($nextCursor);
         }
 
-        $result = $this->provider->searchResources($query);
+        $result = $this->provider->search($query);
 
         if (is_string($result->getNextCursor())) {
             $this->nextCursorResolver->save($query, $searchQuery->getOffset() + $searchQuery->getLimit(), $result->getNextCursor());
@@ -217,24 +201,26 @@ final class RemoteMediaBackend implements BackendInterface
 
     public function searchItemsCount(SearchQuery $searchQuery): int
     {
-        $resourceType = null;
-        $folder = null;
+        $types = $this->getAllowedTypes();
+        $folders = [];
         if ($searchQuery->getLocation() instanceof Location) {
-            $resourceType = $searchQuery->getLocation()->getType() !== Location::RESOURCE_TYPE_ALL
-                ? $searchQuery->getLocation()->getType()
+            $types = $searchQuery->getLocation()->getType() !== Location::RESOURCE_TYPE_ALL
+                ? [$searchQuery->getLocation()->getType()]
                 : $this->getAllowedTypes();
 
-            $folder = $searchQuery->getLocation()->getFolder();
+            $folders = $searchQuery->getLocation()->getFolder() instanceof Folder
+                ? [$searchQuery->getLocation()->getFolder()]
+                : [];
         }
 
-        $query = new Query(
-            $searchQuery->getSearchText(),
-            $resourceType,
-            $searchQuery->getLimit(),
-            $folder,
-        );
+        $query = new Query([
+            'query' => $searchQuery->getSearchText(),
+            'types' => $types,
+            'folders' => $folders,
+            'limit' => $searchQuery->getLimit(),
+        ]);
 
-        return $this->provider->searchResourcesCount($query);
+        return $this->provider->searchCount($query);
     }
 
     public function search(string $searchText, int $offset = 0, int $limit = 25): iterable
@@ -288,18 +274,12 @@ final class RemoteMediaBackend implements BackendInterface
             $allowedTypes = explode(',', $this->config->getParameter('allowed_types'));
         }
 
-        $validTypes = [
-            Location::RESOURCE_TYPE_IMAGE,
-            Location::RESOURCE_TYPE_VIDEO,
-            Location::RESOURCE_TYPE_RAW,
-        ];
-
         foreach ($allowedTypes as $key => $type) {
-            if (!in_array($type, $validTypes, true)) {
+            if (!in_array($type, Location::SUPPORTED_TYPES, true)) {
                 unset($allowedTypes[$key]);
             }
         }
 
-        return count($allowedTypes) > 0 ? $allowedTypes : $validTypes;
+        return count($allowedTypes) > 0 ? $allowedTypes : Location::SUPPORTED_TYPES;
     }
 }

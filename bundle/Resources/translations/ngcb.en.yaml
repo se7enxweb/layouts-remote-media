@@ -4,7 +4,9 @@ columns.remote_media.resolution: Resolution
 columns.remote_media.tags: Tags
 columns.remote_media.size: Size
 
-backend.remote_media.resource_type.all: 'All resources'
-backend.remote_media.resource_type.image: 'Images'
-backend.remote_media.resource_type.video: 'Videos'
-backend.remote_media.resource_type.raw: 'RAW files'
+backend.remote_media.resource_type.all: All resources
+backend.remote_media.resource_type.image: Image
+backend.remote_media.resource_type.audio: Audio
+backend.remote_media.resource_type.video: Video
+backend.remote_media.resource_type.document: Document
+backend.remote_media.resource_type.other: Other

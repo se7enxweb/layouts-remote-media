@@ -1,6 +1,6 @@
 services:
     netgen_layouts.remote_media.next_cursor_resolver:
-        class: Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolver
+        class: Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor
         arguments:
             - "@netgen_layouts.remote_media.cache.pool"
             - "%netgen_layouts.remote_media.cache.ttl%"

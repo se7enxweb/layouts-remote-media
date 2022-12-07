@@ -22,7 +22,6 @@ final class Location implements LocationInterface
     public const RESOURCE_TYPE_ALL = 'all';
 
     public const SUPPORTED_TYPES = [
-        self::RESOURCE_TYPE_ALL,
         RemoteResource::TYPE_IMAGE,
         RemoteResource::TYPE_AUDIO,
         RemoteResource::TYPE_VIDEO,
@@ -59,7 +58,7 @@ final class Location implements LocationInterface
         $idParts = explode('|', $id);
         $resourceType = array_shift($idParts);
 
-        if (!in_array($resourceType, self::SUPPORTED_TYPES, true)) {
+        if (!in_array($resourceType, self::SUPPORTED_TYPES, true) && $resourceType !== self::RESOURCE_TYPE_ALL) {
             throw new InvalidArgumentException('Provided ID ' . $id . ' is invalid');
         }
 
@@ -68,7 +67,7 @@ final class Location implements LocationInterface
         $parentId = null;
 
         if (count($idParts) > 0) {
-            $folder = implode('/', $idParts);
+            $folder = Folder::fromPath(implode('/', $idParts));
             $name = array_pop($idParts);
 
             $parentId = count($idParts) > 0
@@ -76,12 +75,12 @@ final class Location implements LocationInterface
                 : $resourceType;
         }
 
-        return new self($id, $name, $resourceType, Folder::fromPath($folder), $parentId);
+        return new self($id, $name, $resourceType, $folder, $parentId);
     }
 
     public static function createAsSection(string $type, ?string $sectionName = null): self
     {
-        if (!in_array($type, self::SUPPORTED_TYPES, true)) {
+        if (!in_array($type, self::SUPPORTED_TYPES, true) && $type !== self::RESOURCE_TYPE_ALL) {
             throw new InvalidArgumentException('Provided type ' . $type . ' is invalid');
         }
 

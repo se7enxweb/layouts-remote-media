@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Layouts\RemoteMedia\Core\RemoteMedia;
+namespace Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver;
 
+use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolverInterface;
 use Netgen\RemoteMedia\API\Search\Query;
 use Psr\Cache\CacheItemPoolInterface;
 use RuntimeException;
@@ -11,12 +12,8 @@ use function implode;
 use function str_replace;
 use function trim;
 
-final class NextCursorResolver
+final class NextCursor implements NextCursorResolverInterface
 {
-    public const PROJECT_KEY = 'layoutsremotemedia';
-    public const PROVIDER_KEY = 'cloudinary';
-    public const NEXT_CURSOR = 'nextcursor';
-
     private CacheItemPoolInterface $cache;
 
     private int $ttl;
