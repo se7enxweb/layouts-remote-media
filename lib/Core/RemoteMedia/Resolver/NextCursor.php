@@ -8,6 +8,7 @@ use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolverInterface;
 use Netgen\RemoteMedia\API\Search\Query;
 use Psr\Cache\CacheItemPoolInterface;
 use RuntimeException;
+
 use function implode;
 use function str_replace;
 use function trim;
@@ -49,6 +50,8 @@ final class NextCursor implements NextCursorResolverInterface
 
     private function getCacheKey(Query $query, int $offset): string
     {
+        $query->setNextCursor(null);
+
         return $this->washKey(
             implode('-', [self::PROJECT_KEY, self::PROVIDER_KEY, self::NEXT_CURSOR, (string) $query, $offset]),
         );

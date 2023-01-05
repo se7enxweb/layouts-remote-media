@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Layouts\RemoteMedia\Tests\Core\RemoteMedia;
+namespace Netgen\Layouts\RemoteMedia\Tests\Core\RemoteMedia\Resolver;
 
-use Netgen\RemoteMedia\API\Search\Query;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolverInterface;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor as NextCursorResolver;
+use Netgen\RemoteMedia\API\Search\Query;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
-use RuntimeException;
 use Psr\Cache\CacheItemPoolInterface;
+use RuntimeException;
 
-final class NextCursorResolverTest extends TestCase
+final class NextCursorTest extends TestCase
 {
     private const CACHE_TTL = 3600;
 
