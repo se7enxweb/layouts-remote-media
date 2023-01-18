@@ -14,14 +14,15 @@ use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\ContentBrowser\Item\LocationInterface;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
-use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolverInterface;
-use Netgen\RemoteMedia\API\Search\Query;
+use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
 use Netgen\RemoteMedia\API\ProviderInterface;
+use Netgen\RemoteMedia\API\Search\Query;
 use Netgen\RemoteMedia\API\Values\Folder;
+use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
-
 use Symfony\Contracts\Translation\TranslatorInterface;
+
 use function count;
 use function explode;
 use function in_array;
@@ -62,10 +63,10 @@ final class RemoteMediaBackend implements BackendInterface
 
     public function loadItem($value): ItemInterface
     {
-        $query = ResourceQuery::createFromString((string) $value);
+        $query = ResourceQuery::createFromValue((string) $value);
 
         try {
-            $resource = $this->provider->loadByRemoteId($query->getRemoteId());
+            $resource = $this->provider->loadFromRemote($query->getRemoteId());
         } catch (RemoteResourceNotFoundException $e) {
             throw new NotFoundException(
                 sprintf(
@@ -75,7 +76,7 @@ final class RemoteMediaBackend implements BackendInterface
             );
         }
 
-        return new Item($resource);
+        return new Item(new RemoteResourceLocation($resource));
     }
 
     public function getSubLocations(LocationInterface $location): iterable
@@ -133,7 +134,7 @@ final class RemoteMediaBackend implements BackendInterface
 
         $items = [];
         foreach ($result->getResources() as $resource) {
-            $items[] = new Item($resource);
+            $items[] = new Item(new RemoteResourceLocation($resource));
         }
 
         return $items;
@@ -161,6 +162,7 @@ final class RemoteMediaBackend implements BackendInterface
     public function searchItems(SearchQuery $searchQuery): SearchResultInterface
     {
         $types = $this->getAllowedTypes();
+
         $folders = [];
         if ($searchQuery->getLocation() instanceof Location) {
             $types = $searchQuery->getLocation()->getType() !== Location::RESOURCE_TYPE_ALL
@@ -193,7 +195,7 @@ final class RemoteMediaBackend implements BackendInterface
 
         $items = [];
         foreach ($result->getResources() as $resource) {
-            $items[] = new Item($resource);
+            $items[] = new Item(new RemoteResourceLocation($resource));
         }
 
         return new SearchResult($items);
@@ -202,6 +204,7 @@ final class RemoteMediaBackend implements BackendInterface
     public function searchItemsCount(SearchQuery $searchQuery): int
     {
         $types = $this->getAllowedTypes();
+
         $folders = [];
         if ($searchQuery->getLocation() instanceof Location) {
             $types = $searchQuery->getLocation()->getType() !== Location::RESOURCE_TYPE_ALL

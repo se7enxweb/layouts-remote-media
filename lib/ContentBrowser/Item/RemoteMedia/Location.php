@@ -6,16 +6,16 @@ namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia;
 
 use InvalidArgumentException;
 use Netgen\ContentBrowser\Item\LocationInterface;
-
 use Netgen\RemoteMedia\API\Values\Folder;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
+
 use function array_pop;
 use function array_shift;
-use function array_slice;
 use function count;
 use function explode;
 use function implode;
 use function in_array;
+use function str_replace;
 
 final class Location implements LocationInterface
 {
@@ -31,77 +31,37 @@ final class Location implements LocationInterface
 
     private string $id;
 
-    private string $name;
+    private ?string $name;
 
-    private string $type;
+    private function __construct(string $id, ?string $name = null)
+    {
+        $idParts = explode('||', $id);
+        $type = array_shift($idParts);
 
-    private ?Folder $folder;
+        if (!in_array($type, self::SUPPORTED_TYPES, true) && $type !== self::RESOURCE_TYPE_ALL) {
+            throw new InvalidArgumentException('Provided ID ' . $id . ' is invalid');
+        }
 
-    private ?string $parentId;
-
-    private function __construct(
-        string $id,
-        string $name,
-        string $type,
-        ?Folder $folder = null,
-        ?string $parentId = null
-    ) {
         $this->id = $id;
         $this->name = $name;
-        $this->type = $type;
-        $this->folder = $folder;
-        $this->parentId = $parentId;
     }
 
     public static function createFromId(string $id): self
     {
-        $idParts = explode('|', $id);
-        $resourceType = array_shift($idParts);
-
-        if (!in_array($resourceType, self::SUPPORTED_TYPES, true) && $resourceType !== self::RESOURCE_TYPE_ALL) {
-            throw new InvalidArgumentException('Provided ID ' . $id . ' is invalid');
-        }
-
-        $name = $resourceType;
-        $folder = null;
-        $parentId = null;
-
-        if (count($idParts) > 0) {
-            $folder = Folder::fromPath(implode('/', $idParts));
-            $name = array_pop($idParts);
-
-            $parentId = count($idParts) > 0
-                ? $resourceType . '|' . implode('|', $idParts)
-                : $resourceType;
-        }
-
-        return new self($id, $name, $resourceType, $folder, $parentId);
-    }
-
-    public static function createAsSection(string $type, ?string $sectionName = null): self
-    {
-        if (!in_array($type, self::SUPPORTED_TYPES, true) && $type !== self::RESOURCE_TYPE_ALL) {
-            throw new InvalidArgumentException('Provided type ' . $type . ' is invalid');
-        }
-
-        return new self(
-            $type,
-            $sectionName ?? $type,
-            $type,
-        );
+        return new self($id);
     }
 
     public static function createFromFolder(Folder $folder, string $type = self::RESOURCE_TYPE_ALL): self
     {
         $folders = explode('/', $folder->getPath());
-        $id = $type . '|' . implode('|', $folders);
-        $parentId = $type;
+        $id = $type . '||' . implode('|', $folders);
 
-        if (count($folders) > 1) {
-            $parentId .= '|' . implode('|', array_slice($folders, 0, -1));
-        }
+        return new self($id, $folder->getName());
+    }
 
-        return new self($id, $folder->getName(), $type, $folder, $parentId);
+    public static function createAsSection(string $type, ?string $sectionName = null): self
+    {
+        return new self($type, $sectionName);
     }
 
     public function getLocationId(): string
@@ -111,21 +71,51 @@ final class Location implements LocationInterface
 
     public function getName(): string
     {
-        return $this->name;
+        if ($this->name) {
+            return $this->name;
+        }
+
+        $idParts = explode('||', $this->id);
+
+        if (count($idParts) === 1) {
+            return $this->id;
+        }
+
+        array_shift($idParts);
+        $folderPath = array_shift($idParts);
+        $pathArray = explode('|', $folderPath);
+
+        return array_pop($pathArray);
     }
 
     public function getParentId(): ?string
     {
-        return $this->parentId;
+        if (!$this->getFolder() instanceof Folder) {
+            return null;
+        }
+
+        if (!$this->getFolder()->getParent() instanceof Folder) {
+            return $this->getType();
+        }
+
+        return self::createFromFolder($this->getFolder()->getParent(), $this->getType())->getLocationId();
     }
 
     public function getFolder(): ?Folder
     {
-        return $this->folder;
+        $idParts = explode('||', $this->id);
+
+        if (count($idParts) <= 1) {
+            return null;
+        }
+
+        return Folder::fromPath(str_replace('|', '/', $idParts[1]));
     }
 
     public function getType(): string
     {
-        return $this->type;
+        $idParts = explode('||', $this->id);
+
+        return array_shift($idParts);
     }
 }

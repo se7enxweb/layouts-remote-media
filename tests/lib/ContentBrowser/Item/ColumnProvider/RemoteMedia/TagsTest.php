@@ -7,6 +7,7 @@ namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\ColumnProvider\Re
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Tags;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item as RemoteMediaItem;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
+use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 use PHPUnit\Framework\TestCase;
 
 final class TagsTest extends TestCase
@@ -30,7 +31,7 @@ final class TagsTest extends TestCase
             'tags' => ['tag1', 'tag2', 'tag3'],
         ]);
 
-        $item = new RemoteMediaItem($resource);
+        $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
         self::assertSame('tag1, tag2, tag3', $this->tagsColumn->getValue($item));
     }
@@ -46,7 +47,7 @@ final class TagsTest extends TestCase
             'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
         ]);
 
-        $item = new RemoteMediaItem($resource);
+        $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
         self::assertSame('', $this->tagsColumn->getValue($item));
     }

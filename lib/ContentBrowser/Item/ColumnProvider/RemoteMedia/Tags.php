@@ -8,6 +8,7 @@ use Netgen\ContentBrowser\Item\ColumnProvider\ColumnValueProviderInterface;
 use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 
+use function count;
 use function implode;
 
 final class Tags implements ColumnValueProviderInterface
@@ -18,10 +19,10 @@ final class Tags implements ColumnValueProviderInterface
             return null;
         }
 
-        if (count($item->getRemoteResource()->getTags()) === 0) {
+        if (count($item->getRemoteResourceLocation()->getRemoteResource()->getTags()) === 0) {
             return '';
         }
 
-        return implode(', ', $item->getRemoteResource()->getTags());
+        return implode(', ', $item->getRemoteResourceLocation()->getRemoteResource()->getTags());
     }
 }

@@ -8,23 +8,27 @@ use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 use Netgen\Layouts\Tests\Core\Service\TransactionRollback\TestCase;
 use Netgen\RemoteMedia\API\Values\Folder;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
+use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 
 final class ItemTest extends TestCase
 {
-    private RemoteResource $resource;
+    private RemoteResourceLocation $location;
 
     private Item $item;
 
     protected function setUp(): void
     {
-        $this->resource = new RemoteResource([
-            'remoteId' => 'upload|image|folder/test_resource',
-            'type' => 'image',
-            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
-            'folder' => Folder::fromPath('folder'),
-        ]);
+        $this->location = new RemoteResourceLocation(
+            new RemoteResource([
+                'remoteId' => 'upload|image|folder/test_resource',
+                'type' => 'image',
+                'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
+                'name' => 'test_resource',
+                'folder' => Folder::fromPath('folder'),
+            ]),
+        );
 
-        $this->item = new Item($this->resource);
+        $this->item = new Item($this->location);
     }
 
     /**
@@ -33,10 +37,11 @@ final class ItemTest extends TestCase
      */
     public function testGetValue(): void
     {
-        self::assertSame('image|folder|upload%7Cimage%7Cfolder%2Ftest_resource', $this->item->getValue());
+        self::assertSame('upload||image||folder|test_resource', $this->item->getValue());
     }
 
     /**
+     * * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::__construct
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::getName
      */
     public function testGetName(): void
@@ -45,6 +50,7 @@ final class ItemTest extends TestCase
     }
 
     /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::__construct
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::isVisible
      */
     public function testIsVisible(): void
@@ -53,6 +59,7 @@ final class ItemTest extends TestCase
     }
 
     /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::__construct
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::isSelectable
      */
     public function testIsSelectable(): void
@@ -61,6 +68,7 @@ final class ItemTest extends TestCase
     }
 
     /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::__construct
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::getResourceType
      */
     public function testGetType(): void
@@ -69,23 +77,29 @@ final class ItemTest extends TestCase
     }
 
     /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::__construct
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::getRemoteMediaValue
      */
     public function testGetRemoteResource(): void
     {
         self::assertSame(
-            $this->resource->getRemoteId(),
-            $this->item->getRemoteResource()->getRemoteId(),
+            $this->location->getRemoteResource()->getRemoteId(),
+            $this->item->getRemoteResourceLocation()->getRemoteResource()->getRemoteId(),
         );
 
         self::assertSame(
-            $this->resource->getType(),
-            $this->item->getRemoteResource()->getType(),
+            $this->location->getRemoteResource()->getType(),
+            $this->item->getRemoteResourceLocation()->getRemoteResource()->getType(),
         );
 
         self::assertSame(
-            $this->resource->getUrl(),
-            $this->item->getRemoteResource()->getUrl(),
+            $this->location->getRemoteResource()->getUrl(),
+            $this->item->getRemoteResourceLocation()->getRemoteResource()->getUrl(),
+        );
+
+        self::assertSame(
+            $this->location->getRemoteResource()->getFolder()->getPath(),
+            $this->item->getRemoteResourceLocation()->getRemoteResource()->getFolder()->getPath(),
         );
     }
 }

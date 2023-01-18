@@ -7,6 +7,7 @@ namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\ColumnProvider\Re
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Type;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item as RemoteMediaItem;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
+use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 use PHPUnit\Framework\TestCase;
 
 final class TypeTest extends TestCase
@@ -29,7 +30,7 @@ final class TypeTest extends TestCase
             'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
         ]);
 
-        $item = new RemoteMediaItem($resource);
+        $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
         self::assertSame('image', $this->typeColumn->getValue($item));
     }
@@ -46,7 +47,7 @@ final class TypeTest extends TestCase
             'metadata' => ['format' => 'mp4'],
         ]);
 
-        $item = new RemoteMediaItem($resource);
+        $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
         self::assertSame('video / mp4', $this->typeColumn->getValue($item));
     }

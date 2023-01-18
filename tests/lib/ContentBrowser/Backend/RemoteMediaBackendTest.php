@@ -12,11 +12,11 @@ use Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolverInterface;
+use Netgen\RemoteMedia\API\ProviderInterface;
 use Netgen\RemoteMedia\API\Search\Query;
 use Netgen\RemoteMedia\API\Search\Result;
 use Netgen\RemoteMedia\API\Values\Folder;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
-use Netgen\RemoteMedia\API\ProviderInterface;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -153,11 +153,23 @@ final class RemoteMediaBackendTest extends TestCase
      */
     public function testLoadLocation(): void
     {
-        $location = $this->backend->loadLocation('video|some/folder|upload%7Cvideo%7Csome%2Ffolder%2Fpath');
+        $location = $this->backend->loadLocation('video||media|videos');
 
-        self::assertSame('video|some/folder|upload%7Cvideo%7Csome%2Ffolder%2Fpath', $location->getLocationId());
-        self::assertSame('upload%7Cvideo%7Csome%2Ffolder%2Fpath', $location->getName());
-        self::assertSame('video|some/folder', $location->getParentId());
+        self::assertSame('video||media|videos', $location->getLocationId());
+        self::assertSame('videos', $location->getName());
+        self::assertSame('video||media', $location->getParentId());
+
+        $location = $this->backend->loadLocation('video||media');
+
+        self::assertSame('video||media', $location->getLocationId());
+        self::assertSame('media', $location->getName());
+        self::assertSame('video', $location->getParentId());
+
+        $location = $this->backend->loadLocation('video');
+
+        self::assertSame('video', $location->getLocationId());
+        self::assertSame('video', $location->getName());
+        self::assertNull($location->getParentId());
     }
 
     /**
@@ -165,18 +177,19 @@ final class RemoteMediaBackendTest extends TestCase
      */
     public function testLoadItem(): void
     {
-        $value = 'video|some%2Ffolder%2Fpath|upload%7Cvideo%7Csome%2Ffolder%2Fpath%2Fmy_video.mp4';
+        $value = 'upload||video||media|videos|my_video.mp4';
         $resource = new RemoteResource([
-            'remoteId' => 'upload|video|some/folder/path/my_video.mp4',
+            'remoteId' => 'upload|video|media/videos/my_video.mp4',
             'type' => 'video',
-            'url' => 'https://cloudinary.com/test/upload/video/some/folder/path/my_video.mp4',
-            'folder' => Folder::fromPath('some/folder/path'),
+            'url' => 'https://cloudinary.com/test/upload/video/media/videos/my_video.mp4',
+            'folder' => Folder::fromPath('media/videos'),
+            'name' => 'my_video.mp4',
         ]);
 
         $this->providerMock
             ->expects(self::once())
-            ->method('loadByRemoteId')
-            ->with('upload|video|some/folder/path/my_video.mp4')
+            ->method('loadFromRemote')
+            ->with('upload|video|media/videos/my_video.mp4')
             ->willReturn($resource);
 
         $item = $this->backend->loadItem($value);
@@ -191,14 +204,14 @@ final class RemoteMediaBackendTest extends TestCase
      */
     public function testLoadItemNotFound(): void
     {
-        $value = 'video|some/folder|upload%7Cvideo%7Csome%2Ffolder%2Fpath%2Fmy_video.mp4';
+        $value = 'upload||video||media|videos|my_video.mp4';
 
         $this->providerMock
             ->expects(self::once())
-            ->method('loadByRemoteId')
-            ->with('upload|video|some/folder/path/my_video.mp4')
+            ->method('loadFromRemote')
+            ->with('upload|video|media/videos/my_video.mp4')
             ->willThrowException(
-                new RemoteResourceNotFoundException('upload|video|some/folder/path/my_video.mp4'),
+                new RemoteResourceNotFoundException('upload|video|media/videos/my_video.mp4'),
             );
 
         $this->expectException(NotFoundException::class);
@@ -340,13 +353,13 @@ final class RemoteMediaBackendTest extends TestCase
      */
     public function testGetSubItemsWithOffset(): void
     {
-        $location = Location::createFromId('all|some|folder');
+        $location = Location::createFromId('all||media|new');
         $nextCursor = 'k83hn24hs92ao98';
 
         $query = new Query([
             'types' => ['image', 'audio', 'video', 'document', 'other'],
             'limit' => 5,
-            'folders' => ['some/folder'],
+            'folders' => ['media/new'],
         ]);
 
         $this->nextCursorResolverMock
@@ -358,7 +371,7 @@ final class RemoteMediaBackendTest extends TestCase
         $query = new Query([
             'types' => ['image', 'audio', 'video', 'document', 'other'],
             'limit' => 5,
-            'folders' => ['some/folder'],
+            'folders' => ['media/new'],
             'nextCursor' => $nextCursor,
         ]);
 
@@ -387,14 +400,14 @@ final class RemoteMediaBackendTest extends TestCase
      */
     public function testGetSubItemsWithFilter(): void
     {
-        $location = Location::createFromId('all|some|folder');
+        $location = Location::createFromId('all||media|latest');
 
         $this->config->setParameter('allowed_types', 'image,other');
 
         $query = new Query([
             'types' => ['image', 'other'],
             'limit' => 5,
-            'folders' => ['some/folder'],
+            'folders' => ['media/latest'],
         ]);
 
         $this->nextCursorResolverMock
@@ -500,14 +513,14 @@ final class RemoteMediaBackendTest extends TestCase
      */
     public function testGetSubItemsCountInFolderWithFilter(): void
     {
-        $location = Location::createFromId('all|test|folder|subfolder');
+        $location = Location::createFromId('all||media|latest|blog');
 
         $this->config->setParameter('allowed_types', 'image');
 
         $query = new Query([
             'types' => ['image'],
             'limit' => 0,
-            'folders' => ['test/folder/subfolder'],
+            'folders' => ['media/latest/blog'],
         ]);
 
         $this->providerMock
@@ -531,7 +544,7 @@ final class RemoteMediaBackendTest extends TestCase
 
         $query = new Query([
             'types' => ['image', 'audio', 'video', 'document', 'other'],
-            'limit' => 0 ,
+            'limit' => 0,
         ]);
 
         $this->providerMock
@@ -716,7 +729,7 @@ final class RemoteMediaBackendTest extends TestCase
      */
     public function testSearchItemsCount(): void
     {
-        $location = Location::createFromId('other|some|folder');
+        $location = Location::createFromId('other||media|files');
 
         $searchQuery = new SearchQuery('test', $location);
 
@@ -724,7 +737,7 @@ final class RemoteMediaBackendTest extends TestCase
             'query' => 'test',
             'types' => ['other'],
             'limit' => 25,
-            'folders' => ['some/folder'],
+            'folders' => ['media/files'],
         ]);
 
         $this->providerMock
@@ -742,7 +755,7 @@ final class RemoteMediaBackendTest extends TestCase
      */
     public function testSearchItemsCountWithFilter(): void
     {
-        $location = Location::createFromId('all|some|folder');
+        $location = Location::createFromId('all||media|files');
 
         $searchQuery = new SearchQuery('test', $location);
 
@@ -752,7 +765,7 @@ final class RemoteMediaBackendTest extends TestCase
             'query' => 'test',
             'types' => ['video'],
             'limit' => 25,
-            'folders' => ['some/folder'],
+            'folders' => ['media/files'],
         ]);
 
         $this->providerMock
@@ -825,7 +838,7 @@ final class RemoteMediaBackendTest extends TestCase
      */
     public function testSearchCount(): void
     {
-        $location = Location::createFromId('other|some|folder');
+        $location = Location::createFromId('other||media|files');
 
         $searchQuery = new SearchQuery('test', $location);
 
@@ -833,7 +846,7 @@ final class RemoteMediaBackendTest extends TestCase
             'query' => 'test',
             'types' => ['other'],
             'limit' => 25,
-            'folders' => ['some/folder'],
+            'folders' => ['media/files'],
         ]);
 
         $this->providerMock

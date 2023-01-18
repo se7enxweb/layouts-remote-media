@@ -5,36 +5,27 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia;
 
 use Netgen\ContentBrowser\Item\ItemInterface;
-use Netgen\RemoteMedia\API\Values\RemoteResource;
+use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 
-use function array_pop;
-use function explode;
-use function implode;
 use function str_replace;
 
 final class Item implements ItemInterface
 {
-    private RemoteResource $resource;
+    private RemoteResourceLocation $location;
 
-    public function __construct(RemoteResource $resource)
+    public function __construct(RemoteResourceLocation $location)
     {
-        $this->resource = $resource;
+        $this->location = $location;
     }
 
     public function getValue(): string
     {
-        return implode('|', [
-            $this->resource->getType(),
-            urlencode((string) $this->resource->getFolder()),
-            urlencode($this->resource->getRemoteId()),
-        ]);
+        return str_replace(['|', '/'], ['||', '|'], $this->location->getRemoteResource()->getRemoteId());
     }
 
     public function getName(): string
     {
-        $parts = explode('/', $this->resource->getRemoteId());
-
-        return array_pop($parts);
+        return $this->location->getRemoteResource()->getName();
     }
 
     public function isVisible(): bool
@@ -49,11 +40,11 @@ final class Item implements ItemInterface
 
     public function getType(): string
     {
-        return $this->resource->getType();
+        return $this->location->getRemoteResource()->getType();
     }
 
-    public function getRemoteResource(): RemoteResource
+    public function getRemoteResourceLocation(): RemoteResourceLocation
     {
-        return $this->resource;
+        return $this->location;
     }
 }

@@ -7,6 +7,7 @@ namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\ColumnProvider\Re
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Resolution;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item as RemoteMediaItem;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
+use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 use PHPUnit\Framework\TestCase;
 
 final class ResolutionTest extends TestCase
@@ -33,7 +34,7 @@ final class ResolutionTest extends TestCase
             ],
         ]);
 
-        $item = new RemoteMediaItem($resource);
+        $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
         self::assertSame('1920x1080', $this->resolutionColumn->getValue($item));
     }
@@ -53,7 +54,7 @@ final class ResolutionTest extends TestCase
             ],
         ]);
 
-        $item = new RemoteMediaItem($resource);
+        $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
         self::assertSame('', $this->resolutionColumn->getValue($item));
     }
@@ -73,7 +74,7 @@ final class ResolutionTest extends TestCase
             ],
         ]);
 
-        $item = new RemoteMediaItem($resource);
+        $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
         self::assertSame('', $this->resolutionColumn->getValue($item));
     }
@@ -89,7 +90,7 @@ final class ResolutionTest extends TestCase
             'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
         ]);
 
-        $item = new RemoteMediaItem($resource);
+        $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
         self::assertSame('', $this->resolutionColumn->getValue($item));
     }

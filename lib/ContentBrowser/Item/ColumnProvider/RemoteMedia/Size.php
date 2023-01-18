@@ -18,7 +18,7 @@ final class Size implements ColumnValueProviderInterface
             return null;
         }
 
-        return $this->prettyBytes($item->getRemoteResource()->getSize());
+        return $this->prettyBytes($item->getRemoteResourceLocation()->getRemoteResource()->getSize());
     }
 
     private function prettyBytes(int $size, int $precision = 2): string
