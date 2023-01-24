@@ -4,49 +4,44 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Core\RemoteMedia;
 
-use Netgen\RemoteMedia\API\Values\Folder;
-use function array_shift;
+use function array_map;
 use function explode;
+use function implode;
+use function str_replace;
 
 final class ResourceQuery
 {
-    private string $remoteId;
+    private string $value;
 
-    private string $type;
-
-    private ?Folder $folder;
-
-    private function __construct(string $remoteId, string $type, ?Folder $folder = null)
+    private function __construct(string $value)
     {
-        $this->remoteId = $remoteId;
-        $this->type = $type;
-        $this->folder = $folder;
+        $this->value = $value;
     }
 
-    public static function createFromString(string $input): self
+    public static function createFromValue(string $value): self
     {
-        $parts = explode('|', $input);
-        $type = array_shift($parts);
-        $folder = urldecode(array_shift($parts));
-        $remoteId = urldecode(array_shift($parts));
+        return new self($value);
+    }
 
-        $folder = $folder !== '' ? Folder::fromPath($folder) : null;
+    public static function createFromRemoteId(string $remoteId): self
+    {
+        $value = str_replace(['|', '/'], ['||', '|'], $remoteId);
 
-        return new self($remoteId, $type, $folder);
+        return new self($value);
     }
 
     public function getRemoteId(): string
     {
-        return $this->remoteId;
+        $parts = array_map(
+            static fn ($part) => str_replace('|', '/', $part),
+            explode('||', $this->value),
+        );
+
+        return implode('|', $parts);
     }
 
-    public function getType(): string
+    public function getValue(): string
     {
-        return $this->type;
-    }
-
-    public function getFolder(): ?Folder
-    {
-        return $this->folder;
+        return $this->value;
     }
 }

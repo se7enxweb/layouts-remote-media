@@ -14,9 +14,9 @@ final class LayoutsRemoteResourceTest extends TestCase
 {
     /**
      * @covers \Netgen\Layouts\RemoteMedia\API\Values\LayoutsRemoteResource::__construct
+     * @covers \Netgen\Layouts\RemoteMedia\API\Values\LayoutsRemoteResource::getId
      * @covers \Netgen\Layouts\RemoteMedia\API\Values\LayoutsRemoteResource::getRemoteResourceLocation
      * @covers \Netgen\Layouts\RemoteMedia\API\Values\LayoutsRemoteResource::getValue
-     * @covers \Netgen\Layouts\RemoteMedia\API\Values\LayoutsRemoteResource::getId
      */
     public function test(): void
     {
