@@ -7,8 +7,8 @@ namespace Netgen\Layouts\RemoteMedia\Tests\Validator;
 use Netgen\Layouts\RemoteMedia\Validator\Constraint\RemoteMedia;
 use Netgen\Layouts\RemoteMedia\Validator\RemoteMediaValidator;
 use Netgen\Layouts\Tests\TestCase\ValidatorTestCase;
-use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\ProviderInterface;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -41,7 +41,7 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
     {
         $this->provider
             ->expects(self::once())
-            ->method('loadByRemoteId')
+            ->method('loadFromRemote')
             ->with(self::identicalTo('upload|image|folder/test_resource'))
             ->willReturn(new RemoteResource([
                 'type' => RemoteResource::TYPE_IMAGE,
@@ -49,7 +49,7 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
                 'url' => 'https://cloudinary.com/test/upload/image/test_resource',
             ]));
 
-        $this->assertValid(true, 'image|folder|upload%7Cimage%7Cfolder%2Ftest_resource');
+        $this->assertValid(true, 'upload||image||folder|test_resource');
     }
 
     /**
@@ -60,7 +60,7 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
     {
         $this->provider
             ->expects(self::never())
-            ->method('loadByRemoteId');
+            ->method('loadFromRemote');
 
         $this->assertValid(true, null);
     }
@@ -73,11 +73,11 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
     {
         $this->provider
             ->expects(self::once())
-            ->method('loadByRemoteId')
+            ->method('loadFromRemote')
             ->with(self::identicalTo('upload|image|folder/test_resource2'))
             ->willThrowException(new RemoteResourceNotFoundException('upload|image|folder/test_resource2'));
 
-        $this->assertValid(false, 'image|folder|upload%7Cimage%7Cfolder%2Ftest_resource2');
+        $this->assertValid(false, 'upload||image||folder|test_resource2');
     }
 
     /**

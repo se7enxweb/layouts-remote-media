@@ -40,10 +40,10 @@ final class RemoteMediaValidator extends ConstraintValidator
             throw new UnexpectedTypeException($value, 'string');
         }
 
-        $query = ResourceQuery::createFromString($value);
+        $query = ResourceQuery::createFromValue($value);
 
         try {
-            $this->provider->loadByRemoteId($query->getRemoteId());
+            $this->provider->loadFromRemote($query->getRemoteId());
         } catch (RemoteResourceNotFoundException $e) {
             $this->context
                 ->buildViolation($constraint->message)
