@@ -13,7 +13,7 @@ use Netgen\RemoteMedia\API\Values\TimestampableTrait;
  * @ORM\Table(name="ngl_remote_media_resource")
  * @ORM\HasLifecycleCallbacks()
  */
-final class LayoutsRemoteResource
+class LayoutsRemoteResource
 {
     use TimestampableTrait;
 
