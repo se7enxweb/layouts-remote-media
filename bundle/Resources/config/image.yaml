@@ -3,12 +3,25 @@ image_variations:
         small:
             transformations:
                 - { name: crop, params: [200, 200] }
-                - { name: resize, params: [200, 200] }
+                - { name: fill, params: [200, 200] }
+                - { name: quality, params: ['auto', 'eco'] }
         medium:
             transformations:
                 - { name: crop, params: [800, 450] }
-                - { name: resize, params: [800, 450] }
+                - { name: fill, params: [800, 450] }
+                - { name: quality, params: ['auto', 'eco'] }
         large:
             transformations:
                 - { name: crop, params: [1600, 900] }
-                - { name: resize, params: [1600, 900] }
+                - { name: fill, params: [1600, 900] }
+                - { name: quality, params: ['auto', 'eco'] }
+    netgen_layouts_item:
+        admin_preview:
+            transformations:
+                - { name: crop, params: [100, 80] }
+                - { name: fill, params: [100, 80] }
+                - { name: quality, params: ['auto', 'eco'] }
+        content_browser_preview:
+            transformations:
+                - { name: limit, params: [800] }
+                - { name: quality, params: ['auto', 'eco'] }
