@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace Netgen\Bundle\LayoutsRemoteMediaBundle\Tests\Templating\Twig\Runtime;
 
 use Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime;
+use Netgen\RemoteMedia\API\ProviderInterface;
+use Netgen\RemoteMedia\API\Values\Folder;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
-use Netgen\RemoteMedia\API\Values\Variation;
-use Netgen\RemoteMedia\Core\RemoteMediaProvider;
+use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
+use Netgen\RemoteMedia\API\Values\RemoteResourceVariation;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 final class RemoteMediaRuntimeTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\RemoteMedia\Core\RemoteMediaProvider
+     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\RemoteMedia\API\ProviderInterface
      */
     private MockObject $providerMock;
 
@@ -22,11 +24,9 @@ final class RemoteMediaRuntimeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->providerMock = $this->createMock(RemoteMediaProvider::class);
+        $this->providerMock = $this->createMock(ProviderInterface::class);
 
-        $this->runtime = new RemoteMediaRuntime(
-            $this->providerMock,
-        );
+        $this->runtime = new RemoteMediaRuntime($this->providerMock);
     }
 
     /**
@@ -35,21 +35,28 @@ final class RemoteMediaRuntimeTest extends TestCase
      */
     public function testGetBlockVariation(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'test_image']);
-        $variationUrl = 'https://cloudinary.com/upload/some_variation_config/test_image';
-        $variation = new Variation([
-            'url' => $variationUrl,
+        $resource = new RemoteResource([
+            'type' => RemoteResource::TYPE_VIDEO,
+            'remoteId' => 'upload|video|folder/test_resource',
+            'url' => 'https://cloudinary.com/test/upload/video/folder/test_resource',
+            'folder' => Folder::fromPath('folder'),
+            'name' => 'test_resource',
         ]);
+
+        $variationUrl = 'https://cloudinary.com/upload/some_variation_config/test_resource';
+        $variation = new RemoteResourceVariation($resource, $variationUrl);
+
+        $location = new RemoteResourceLocation($resource);
 
         $this->providerMock
             ->expects(self::once())
             ->method('buildVariation')
-            ->with($resource, 'netgen_layouts_block', 'test_variation', true)
+            ->with($location, 'netgen_layouts_block', 'test_variation')
             ->willReturn($variation);
 
         self::assertSame(
             $variationUrl,
-            $this->runtime->getBlockVariation($resource, 'test_variation')->url,
+            $this->runtime->getBlockVariation($location, 'test_variation')->getUrl(),
         );
     }
 
@@ -59,46 +66,86 @@ final class RemoteMediaRuntimeTest extends TestCase
      */
     public function testGetItemVariation(): void
     {
-        $resource = RemoteResource::createFromParameters(['resourceId' => 'test_image']);
-        $variationUrl = 'https://cloudinary.com/upload/some_variation_config/test_image';
-        $variation = new Variation([
-            'url' => $variationUrl,
+        $resource = new RemoteResource([
+            'type' => RemoteResource::TYPE_VIDEO,
+            'remoteId' => 'upload|video|folder/test_resource',
+            'url' => 'https://cloudinary.com/test/upload/video/folder/test_resource',
+            'folder' => Folder::fromPath('folder'),
+            'name' => 'test_resource',
         ]);
+
+        $variationUrl = 'https://cloudinary.com/upload/some_variation_config/test_resource';
+        $variation = new RemoteResourceVariation($resource, $variationUrl);
+
+        $location = new RemoteResourceLocation($resource);
 
         $this->providerMock
             ->expects(self::once())
             ->method('buildVariation')
-            ->with($resource, 'netgen_layouts_item', 'test_variation', true)
+            ->with($location, 'netgen_layouts_item', 'test_variation')
             ->willReturn($variation);
 
         self::assertSame(
             $variationUrl,
-            $this->runtime->getBlockVariation($resource, 'test_variation')->url,
+            $this->runtime->getItemVariation($location, 'test_variation')->getUrl(),
         );
     }
 
     /**
      * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::__construct
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::getBlockVideoTag
+     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::getBlockTag
      */
-    public function testGetBlockVideoTag(): void
+    public function testGetBlockTag(): void
     {
-        $resource = RemoteResource::createFromParameters([
-            'resourceId' => 'test_video',
-            'resourceType' => 'video',
+        $resource = new RemoteResource([
+            'type' => RemoteResource::TYPE_VIDEO,
+            'remoteId' => 'upload|video|folder/test_resource',
+            'url' => 'https://cloudinary.com/test/upload/video/folder/test_resource',
+            'folder' => Folder::fromPath('folder'),
+            'name' => 'test_resource',
         ]);
 
-        $videoTagString = '<video src="https://cloudinary.com/upload/some_variation_config/test_video">';
+        $location = new RemoteResourceLocation($resource);
+        $tagString = '<video src="https://cloudinary.com/upload/some_variation_config/test_resource">';
 
         $this->providerMock
             ->expects(self::once())
-            ->method('generateVideoTag')
-            ->with($resource, 'netgen_layouts_block', 'test_variation')
-            ->willReturn($videoTagString);
+            ->method('generateVariationHtmlTag')
+            ->with($location, 'netgen_layouts_block', 'test_variation', [], true, false)
+            ->willReturn($tagString);
 
         self::assertSame(
-            $videoTagString,
-            $this->runtime->getBlockVideoTag($resource, 'test_variation'),
+            $tagString,
+            $this->runtime->getBlockTag($location, 'test_variation'),
+        );
+    }
+
+    /**
+     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::__construct
+     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::getItemTag
+     */
+    public function testGetItemTag(): void
+    {
+        $resource = new RemoteResource([
+            'type' => RemoteResource::TYPE_VIDEO,
+            'remoteId' => 'upload|image|folder/example',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/example',
+            'folder' => Folder::fromPath('folder'),
+            'name' => 'example',
+        ]);
+
+        $location = new RemoteResourceLocation($resource);
+        $tagString = '<img src="https://cloudinary.com/upload/some_variation_config/example">';
+
+        $this->providerMock
+            ->expects(self::once())
+            ->method('generateVariationHtmlTag')
+            ->with($location, 'netgen_layouts_item', 'test_variation', [], true, true)
+            ->willReturn($tagString);
+
+        self::assertSame(
+            $tagString,
+            $this->runtime->getItemTag($location, 'test_variation', true),
         );
     }
 }
