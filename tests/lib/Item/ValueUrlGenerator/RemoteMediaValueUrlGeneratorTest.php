@@ -6,6 +6,7 @@ namespace Netgen\Layouts\RemoteMedia\Tests\Item\ValueUrlGenerator;
 
 use Netgen\Layouts\RemoteMedia\Item\ValueUrlGenerator\RemoteMediaValueUrlGenerator;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
+use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 use PHPUnit\Framework\TestCase;
 
 final class RemoteMediaValueUrlGeneratorTest extends TestCase
@@ -28,6 +29,8 @@ final class RemoteMediaValueUrlGeneratorTest extends TestCase
             'url' => 'https://cloudinary.com/test/upload/video/folder/test_resource',
         ]);
 
-        self::assertSame('https://cloudinary.com/test/upload/video/folder/test_resource', $this->urlGenerator->generate($resource));
+        $location = new RemoteResourceLocation($resource);
+
+        self::assertSame('https://cloudinary.com/test/upload/video/folder/test_resource', $this->urlGenerator->generate($location));
     }
 }

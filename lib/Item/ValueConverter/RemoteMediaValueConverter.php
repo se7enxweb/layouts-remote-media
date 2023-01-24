@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\Item\ValueConverter;
 
 use Netgen\Layouts\Item\ValueConverterInterface;
-use Netgen\RemoteMedia\API\Values\RemoteResource;
+use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 
 use function array_pop;
 use function explode;
 
 /**
- * @implements \Netgen\Layouts\Item\ValueConverterInterface<\Netgen\RemoteMedia\API\Values\RemoteResource>
+ * @implements \Netgen\Layouts\Item\ValueConverterInterface<\Netgen\RemoteMedia\API\Values\RemoteResourceLocation>
  */
 final class RemoteMediaValueConverter implements ValueConverterInterface
 {
     public function supports(object $object): bool
     {
-        return $object instanceof RemoteResource;
+        return $object instanceof RemoteResourceLocation;
     }
 
     public function getValueType(object $object): string
@@ -27,17 +27,17 @@ final class RemoteMediaValueConverter implements ValueConverterInterface
 
     public function getId(object $object)
     {
-        return $object->getRemoteId();
+        return $object->getRemoteResource()->getRemoteId();
     }
 
     public function getRemoteId(object $object)
     {
-        return $object->getRemoteId();
+        return $object->getRemoteResource()->getRemoteId();
     }
 
     public function getName(object $object): string
     {
-        $parts = explode('/', $object->getRemoteId());
+        $parts = explode('/', $object->getRemoteResource()->getRemoteId());
 
         return array_pop($parts);
     }
@@ -47,7 +47,7 @@ final class RemoteMediaValueConverter implements ValueConverterInterface
         return true;
     }
 
-    public function getObject(object $object): RemoteResource
+    public function getObject(object $object): RemoteResourceLocation
     {
         return $object;
     }

@@ -7,12 +7,12 @@ namespace Netgen\Layouts\RemoteMedia\Item\ValueUrlGenerator;
 use Netgen\Layouts\Item\ValueUrlGeneratorInterface;
 
 /**
- * @implements \Netgen\Layouts\Item\ValueUrlGeneratorInterface<\Netgen\RemoteMedia\API\Values\RemoteResource>
+ * @implements \Netgen\Layouts\Item\ValueUrlGeneratorInterface<\Netgen\RemoteMedia\API\Values\RemoteResourceLocation>
  */
 final class RemoteMediaValueUrlGenerator implements ValueUrlGeneratorInterface
 {
     public function generate(object $object): ?string
     {
-        return $object->getUrl();
+        return $object->getRemoteResource()->getUrl();
     }
 }
