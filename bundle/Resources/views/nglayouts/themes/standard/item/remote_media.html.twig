@@ -1,27 +1,8 @@
-{% set resource = item.object %}
-
-{% set imageConst = constant('Netgen\\RemoteMedia\\API\\Values\\RemoteResource::TYPE_IMAGE') %}
-{% set videoConst = constant('Netgen\\RemoteMedia\\API\\Values\\RemoteResource::TYPE_VIDEO') %}
-{% set otherConst = constant('Netgen\\RemoteMedia\\API\\Values\\RemoteResource::TYPE_OTHER') %}
+{% set resource_location = item.object %}
+{% set resource = item.object.remoteResource %}
 
 {% if resource %}
     <div class="remote-media">
-        {% if resource.mediaType == imageConst %}
-            {% set image_url = resource.secure_url %}
-
-            {% set variation = netgen_layouts_remote_media_item_variation(resource, view_type) %}
-            {% if variation %}
-                {% set image_url = variation.url %}
-            {% endif %}
-
-            <img src="{{ image_url }}"
-                {% if resource.metaData.alt_text %}alt="{{ resource.metaData.alt_text }}"{% endif %}
-                {% if resource.metaData.caption %}title="{{ resource.metaData.caption }}"{% endif %}
-            />
-        {% elseif resource.mediaType == videoConst %}
-            {{ netgen_layouts_remote_media_block_video_tag(resource, view_type)|raw }}
-        {% else %}
-            <a href="{{ netgen_remote_media_download_url(resource) }}">{{ resource.resourceId }}</a>
-        {% endif %}
+        {{ netgen_layouts_remote_media_item_tag(resource_location, view_type)|raw }}
     </div>
 {% endif %}

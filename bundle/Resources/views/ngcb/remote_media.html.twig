@@ -1,13 +1,15 @@
-{% if item.remoteMediaValue.mediaType == 'image' %}
-    <div class="remote-media">
-        <img src="{{ item.remoteMediaValue.secure_url }}" />
-    </div>
-{% elseif item.remoteMediaValue.mediaType == 'video' %}
-    {% set thumbnail = netgen_remote_media_video_thumbnail_url(item.remoteMediaValue) %}
+{% set remote_resource_location = item.remoteResourceLocation %}
 
-    {% if thumbnail %}
-        <div class="remote-media">
-            <img src="{{ thumbnail }}" />
-        </div>
-    {% endif %}
+{% if remote_resource_location %}
+    <div class="image">
+        {% if remote_resource_location.remoteResource.type == 'image' %}
+            {{ netgen_layouts_remote_media_item_tag(remote_resource_location, 'content_browser_preview')|raw }}
+        {% elseif remote_resource_location.remoteResource.type == 'video' %}
+            {{ netgen_layouts_remote_media_item_tag(remote_resource_location, 'content_browser_preview', true)|raw }}
+        {% elseif remote_resource_location.remoteResource.type == 'audio' %}
+            <i class="material-icons" style="font-size: 250px" aria-hidden="true">audiotrack</i>
+        {% else %}
+            <i class="material-icons" style="font-size: 250px" aria-hidden="true">insert_drive_file</i>
+        {% endif %}
+    </div>
 {% endif %}

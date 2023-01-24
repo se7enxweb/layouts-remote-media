@@ -9,10 +9,10 @@
 
     {% if resource %}
         <div class="image">
-            {% if resource.mediaType == 'image' %}
-                <img src="{{ resource.secure_url }}" />
-            {% elseif resource.mediaType == 'video' %}
-                {% set thumbnail = netgen_remote_media_video_thumbnail_url(resource) %}
+            {% if resource.type == 'image' %}
+                <img src="{{ resource.url }}" />
+            {% elseif resource.type == 'video' %}
+                {% set thumbnail = ngrm_video_thumbnail(resource).url %}
 
                 {% if thumbnail %}
                     <img src="{{ thumbnail }}" />
@@ -25,13 +25,13 @@
         </div>
 
         <div class="name">
-            <p>{{ resource.resourceId }}</p>
+            <p>{{ resource.remoteId }}</p>
         </div>
 
         <div class="value-type">
             <p>
                 Remote media:
-                {{ resource.resourceType }}
+                {{ resource.type }}
 
                 {% if resource.metaData.format is defined and resource.metaData.format %}
                     / {{ resource.metaData.format }}

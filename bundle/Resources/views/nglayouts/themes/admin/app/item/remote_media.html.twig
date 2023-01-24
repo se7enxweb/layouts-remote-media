@@ -1,15 +1,13 @@
-{% if item.object is defined %}
-    <div class="image">
-        {% if item.object.mediaType == 'image' %}
-            <img src="{{ nglayouts_item_path(item) }}" />
-        {% elseif item.object.mediaType == 'video' %}
-            {% set thumbnail = netgen_remote_media_video_thumbnail_url(item.object) %}
+{% set remote_resource_location = item.object %}
 
-            {% if thumbnail %}
-                <img src="{{ thumbnail }}" />
-            {% else %}
-                <i class="material-icons" aria-hidden="true">audiotrack</i>
-            {% endif %}
+{% if remote_resource_location %}
+    <div class="image">
+        {% if remote_resource_location.remoteResource.type == 'image' %}
+            {{ netgen_layouts_remote_media_item_tag(remote_resource_location, 'admin_preview')|raw }}
+        {% elseif remote_resource_location.remoteResource.type == 'video' %}
+            {{ netgen_layouts_remote_media_item_tag(remote_resource_location, 'admin_preview', true)|raw }}
+        {% elseif remote_resource_location.remoteResource.type == 'audio' %}
+            <i class="material-icons" aria-hidden="true">audiotrack</i>
         {% else %}
             <i class="material-icons" aria-hidden="true">insert_drive_file</i>
         {% endif %}
@@ -20,14 +18,14 @@
     <p>{{ item.name }}</p>
 </div>
 
-{% if item.object.metaData is defined %}
+{% if remote_resource_location %}
     <div class="value-type">
         <p>
             Remote media:
-            {{ item.object.resourceType }}
+            {{ remote_resource_location.remoteResource.type }}
 
-            {% if item.object.metaData.format is defined and item.object.metaData.format %}
-                / {{ item.object.metaData.format }}
+            {% if remote_resource_location.remoteResource.hasMetadataProperty('format') %}
+                / {{ remote_resource_location.remoteResource.getMetadataProperty('format') }}
             {% endif %}
         </p>
     </div>

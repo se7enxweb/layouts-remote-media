@@ -5,27 +5,9 @@
         {% set resource = block.dynamicParameter('resource') %}
         {% set variation = block.parameter('variation').value %}
 
-        {% set videoConst = constant('Netgen\\RemoteMedia\\API\\Values\\RemoteResource::TYPE_VIDEO') %}
-        {% set imageConst = constant('Netgen\\RemoteMedia\\API\\Values\\RemoteResource::TYPE_IMAGE') %}
-        {% set otherConst = constant('Netgen\\RemoteMedia\\API\\Values\\RemoteResource::TYPE_OTHER') %}
-
         {% if resource %}
             <div class="remote-media">
-                {% if resource.mediaType == imageConst %}
-                    {% set image_url = resource.secure_url %}
-                    {% if variation %}
-                        {% set image_url = netgen_layouts_remote_media_block_variation(resource, variation).url %}
-                    {% endif %}
-
-                    <img src="{{ image_url }}"
-                        {% if resource.metaData.alt_text %}alt="{{ resource.metaData.alt_text }}"{% endif %}
-                        {% if resource.metaData.caption %}title="{{ resource.metaData.caption }}"{% endif %}
-                    />
-                {% elseif resource.mediaType == videoConst %}
-                    {{ netgen_layouts_remote_media_block_video_tag(resource, variation)|raw }}
-                {% else %}
-                    <a href="{{ netgen_remote_media_download_url(resource) }}">{{ resource.resourceId }}</a>
-                {% endif %}
+                {{ netgen_layouts_remote_media_block_tag(resource_location, variation)|raw }}
             </div>
         {% endif %}
     {% endblock %}
