@@ -20,12 +20,6 @@ final class Type implements ColumnValueProviderInterface
 
         $value = $item->getRemoteResourceLocation()->getRemoteResource()->getType();
 
-        if ($value === 'other') {
-            dump($item->getRemoteResourceLocation()->getRemoteResource());
-
-            exit;
-        }
-
         $format = $item->getRemoteResourceLocation()->getRemoteResource()->getMetadataProperty('format') ?? '';
 
         if ($format !== '') {
