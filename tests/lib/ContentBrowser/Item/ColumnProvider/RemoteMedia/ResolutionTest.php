@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\ColumnProvider\RemoteMedia;
 
+use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Resolution;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item as RemoteMediaItem;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
@@ -93,5 +94,15 @@ final class ResolutionTest extends TestCase
         $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
         self::assertSame('', $this->resolutionColumn->getValue($item));
+    }
+
+    /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Resolution::getValue
+     */
+    public function testGetValueWithWrongItem(): void
+    {
+        $itemMock = $this->createMock(ItemInterface::class);
+
+        self::assertNull($this->resolutionColumn->getValue($itemMock));
     }
 }

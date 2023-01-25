@@ -69,7 +69,7 @@ final class ItemTest extends TestCase
 
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::getResourceType
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::getType
      */
     public function testGetType(): void
     {
@@ -78,7 +78,7 @@ final class ItemTest extends TestCase
 
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::getRemoteMediaValue
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item::getRemoteResourceLocation
      */
     public function testGetRemoteResource(): void
     {

@@ -55,6 +55,16 @@ final class LocationTest extends TestCase
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location::__construct
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location::createAsSection
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location::getName
+     */
+    public function testGetNameWithSectionWithoutName(): void
+    {
+        self::assertSame('image', Location::createAsSection('image')->getName());
+    }
+
+    /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location::__construct
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location::createAsSection
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location::createFromFolder
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location::createFromId
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location::getParentId
@@ -64,6 +74,16 @@ final class LocationTest extends TestCase
         self::assertNull($this->sectionLocation->getParentId());
         self::assertSame('image||some|folder', $this->folderLocation->getParentId());
         self::assertSame('video||some|folder', $this->location->getParentId());
+    }
+
+    /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location::__construct
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location::createFromFolder
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location::getParentId
+     */
+    public function testGetParentIdWithSingleFolder(): void
+    {
+        self::assertSame('image', Location::createFromFolder(Folder::fromPath('some'), 'image')->getParentId());
     }
 
     /**

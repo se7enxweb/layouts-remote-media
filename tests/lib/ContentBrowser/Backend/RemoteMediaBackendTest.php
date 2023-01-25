@@ -8,6 +8,7 @@ use Netgen\ContentBrowser\Backend\SearchQuery;
 use Netgen\ContentBrowser\Backend\SearchResult;
 use Netgen\ContentBrowser\Config\Configuration;
 use Netgen\ContentBrowser\Exceptions\NotFoundException;
+use Netgen\ContentBrowser\Item\LocationInterface;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
@@ -270,6 +271,16 @@ final class RemoteMediaBackendTest extends TestCase
     }
 
     /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubLocations
+     */
+    public function testGetSubLocationsInvalidLocation(): void
+    {
+        $locationMock = $this->createMock(LocationInterface::class);
+
+        self::assertSame([], $this->backend->getSubLocations($locationMock));
+    }
+
+    /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubLocationsCount
      */
     public function testGetSubLocationsCountRoot(): void
@@ -310,6 +321,16 @@ final class RemoteMediaBackendTest extends TestCase
             ->willReturn($folders);
 
         self::assertSame(3, $this->backend->getSubLocationsCount($location));
+    }
+
+    /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubLocationsCount
+     */
+    public function testGetSubLocationsCountInvalidLocation(): void
+    {
+        $locationMock = $this->createMock(LocationInterface::class);
+
+        self::assertSame(0, $this->backend->getSubLocationsCount($locationMock));
     }
 
     /**
@@ -465,6 +486,16 @@ final class RemoteMediaBackendTest extends TestCase
     }
 
     /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItems
+     */
+    public function testGetSubItemsInvalidLocation(): void
+    {
+        $locationMock = $this->createMock(LocationInterface::class);
+
+        self::assertSame([], $this->backend->getSubItems($locationMock));
+    }
+
+    /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItemsCount
      */
     public function testGetSubItemsCountInSection(): void
@@ -558,6 +589,17 @@ final class RemoteMediaBackendTest extends TestCase
 
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItemsCount
+     */
+    public function testGetSubItemsCountInvalidLocation(): void
+    {
+        $locationMock = $this->createMock(LocationInterface::class);
+
+        self::assertSame(0, $this->backend->getSubItemsCount($locationMock));
+    }
+
+    /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::searchItems
      */
     public function testSearchItems(): void
@@ -601,7 +643,7 @@ final class RemoteMediaBackendTest extends TestCase
      */
     public function testSearchItemsWithFilter(): void
     {
-        $location = Location::createFromId('all');
+        $location = Location::createFromFolder(Folder::fromPath('media'), 'all');
 
         $searchQuery = new SearchQuery('test', $location);
 
@@ -613,6 +655,7 @@ final class RemoteMediaBackendTest extends TestCase
 
         $query = new Query([
             'query' => 'test',
+            'folders' => [Folder::fromPath('media')],
             'types' => ['other'],
             'limit' => 25,
         ]);
@@ -838,24 +881,19 @@ final class RemoteMediaBackendTest extends TestCase
      */
     public function testSearchCount(): void
     {
-        $location = Location::createFromId('other||media|files');
-
-        $searchQuery = new SearchQuery('test', $location);
-
         $query = new Query([
             'query' => 'test',
-            'types' => ['other'],
+            'types' => ['image', 'audio', 'video', 'document', 'other'],
             'limit' => 25,
-            'folders' => ['media/files'],
         ]);
 
         $this->providerMock
             ->expects(self::once())
             ->method('searchCount')
             ->with($query)
-            ->willReturn(12);
+            ->willReturn(15);
 
-        self::assertSame(12, $this->backend->searchItemsCount($searchQuery));
+        self::assertSame(15, $this->backend->searchCount('test'));
     }
 
     private function getSearchResult(): Result

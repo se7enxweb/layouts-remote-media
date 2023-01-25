@@ -27,7 +27,7 @@ final class CachePoolPassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @covers \Netgen\Bundle\RemoteMediaBundle\DependencyInjection\CompilerPass\CachePoolPass::process
+     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\DependencyInjection\CompilerPass\CachePoolPass::process
      */
     public function testCompilerPassWithoutParameter(): void
     {

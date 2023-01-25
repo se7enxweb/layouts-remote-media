@@ -33,6 +33,7 @@ final class NextCursorTest extends TestCase
     }
 
     /**
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::__construct
      * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::getCacheKey
      * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::resolve
      * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::washKey
@@ -61,6 +62,7 @@ final class NextCursorTest extends TestCase
     }
 
     /**
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::__construct
      * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::getCacheKey
      * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::resolve
      * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::washKey
@@ -87,6 +89,7 @@ final class NextCursorTest extends TestCase
     }
 
     /**
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::__construct
      * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::getCacheKey
      * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::save
      * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::washKey
