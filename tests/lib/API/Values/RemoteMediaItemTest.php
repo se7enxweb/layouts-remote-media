@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Tests\API\Values;
 
-use Netgen\Layouts\RemoteMedia\API\Values\LayoutsRemoteResource;
+use Netgen\Layouts\RemoteMedia\API\Values\RemoteMediaItem;
 use Netgen\RemoteMedia\API\Values\CropSettings;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 use PHPUnit\Framework\TestCase;
 
-final class LayoutsRemoteResourceTest extends TestCase
+final class RemoteMediaItemTest extends TestCase
 {
     /**
-     * @covers \Netgen\Layouts\RemoteMedia\API\Values\LayoutsRemoteResource::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\API\Values\LayoutsRemoteResource::getId
-     * @covers \Netgen\Layouts\RemoteMedia\API\Values\LayoutsRemoteResource::getRemoteResourceLocation
-     * @covers \Netgen\Layouts\RemoteMedia\API\Values\LayoutsRemoteResource::getValue
+     * @covers \Netgen\Layouts\RemoteMedia\API\Values\RemoteMediaItem::__construct
+     * @covers \Netgen\Layouts\RemoteMedia\API\Values\RemoteMediaItem::getId
+     * @covers \Netgen\Layouts\RemoteMedia\API\Values\RemoteMediaItem::getRemoteResourceLocation
+     * @covers \Netgen\Layouts\RemoteMedia\API\Values\RemoteMediaItem::getValue
      */
     public function test(): void
     {
@@ -36,28 +36,28 @@ final class LayoutsRemoteResourceTest extends TestCase
             ],
         );
 
-        $layoutsRemoteResource = new LayoutsRemoteResource('upload||image||media|example', $location);
+        $remoteMediaItem = new RemoteMediaItem('upload||image||media|example', $location);
 
         self::assertSame(
             'upload||image||media|example',
-            $layoutsRemoteResource->getValue(),
+            $remoteMediaItem->getValue(),
         );
 
-        self::assertNull($layoutsRemoteResource->getId());
+        self::assertNull($remoteMediaItem->getId());
 
         self::assertSame(
             $location->getCropSettings(),
-            $layoutsRemoteResource->getRemoteResourceLocation()->getCropSettings(),
+            $remoteMediaItem->getRemoteResourceLocation()->getCropSettings(),
         );
 
         self::assertSame(
             $resource->getRemoteId(),
-            $layoutsRemoteResource->getRemoteResourceLocation()->getRemoteResource()->getRemoteId(),
+            $remoteMediaItem->getRemoteResourceLocation()->getRemoteResource()->getRemoteId(),
         );
 
         self::assertSame(
             $resource->getUrl(),
-            $layoutsRemoteResource->getRemoteResourceLocation()->getRemoteResource()->getUrl(),
+            $remoteMediaItem->getRemoteResourceLocation()->getRemoteResource()->getUrl(),
         );
     }
 }

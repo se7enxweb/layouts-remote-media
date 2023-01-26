@@ -7,7 +7,7 @@ namespace Netgen\Layouts\RemoteMedia\Item\ValueLoader;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Netgen\Layouts\Item\ValueLoaderInterface;
-use Netgen\Layouts\RemoteMedia\API\Values\LayoutsRemoteResource;
+use Netgen\Layouts\RemoteMedia\API\Values\RemoteMediaItem;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
 use Netgen\RemoteMedia\API\ProviderInterface;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
@@ -20,22 +20,22 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
 
     private EntityManagerInterface $entityManager;
 
-    private EntityRepository $layoutsRemoteResourceRepository;
+    private EntityRepository $remoteMediaItemRepository;
 
     public function __construct(ProviderInterface $provider, EntityManagerInterface $entityManager)
     {
         $this->provider = $provider;
         $this->entityManager = $entityManager;
-        $this->layoutsRemoteResourceRepository = $entityManager->getRepository(LayoutsRemoteResource::class);
+        $this->remoteMediaItemRepository = $entityManager->getRepository(RemoteMediaItem::class);
     }
 
     public function load($id): ?object
     {
         $query = ResourceQuery::createFromValue((string) $id);
 
-        $layoutsRemoteResource = $this->layoutsRemoteResourceRepository->findOneBy(['value' => $query->getValue()]);
+        $remoteMediaItem = $this->remoteMediaItemRepository->findOneBy(['value' => $query->getValue()]);
 
-        if (!$layoutsRemoteResource instanceof LayoutsRemoteResource) {
+        if (!$remoteMediaItem instanceof RemoteMediaItem) {
             try {
                 $remoteResource = $this->resolveRemoteResource($query);
                 $remoteResourceLocation = new RemoteResourceLocation($remoteResource);
@@ -46,13 +46,13 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
                 return null;
             }
 
-            $layoutsRemoteResource = new LayoutsRemoteResource($query->getValue(), $remoteResourceLocation);
+            $remoteMediaItem = new RemoteMediaItem($query->getValue(), $remoteResourceLocation);
 
-            $this->entityManager->persist($layoutsRemoteResource);
+            $this->entityManager->persist($remoteMediaItem);
             $this->entityManager->flush();
         }
 
-        return $layoutsRemoteResource->getRemoteResourceLocation();
+        return $remoteMediaItem->getRemoteResourceLocation();
     }
 
     public function loadByRemoteId($remoteId): ?object

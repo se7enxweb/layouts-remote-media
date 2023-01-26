@@ -8,8 +8,6 @@ use Netgen\ContentBrowser\Item\ColumnProvider\ColumnValueProviderInterface;
 use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 
-use function dump;
-
 final class Type implements ColumnValueProviderInterface
 {
     public function getValue(ItemInterface $item): ?string

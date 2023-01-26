@@ -10,10 +10,10 @@ use Netgen\RemoteMedia\API\Values\TimestampableTrait;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="ngl_remote_media_resource")
+ * @ORM\Table(name="nglayouts_remote_media_item")
  * @ORM\HasLifecycleCallbacks()
  */
-class LayoutsRemoteResource
+class RemoteMediaItem
 {
     use TimestampableTrait;
 
@@ -25,7 +25,7 @@ class LayoutsRemoteResource
     private ?int $id = null;
 
     /**
-     * @ORM\Column(name="remote_id", unique=true, type="string", length=255)
+     * @ORM\Column(name="value", unique=true, type="string", length=255)
      */
     private string $value;
 
