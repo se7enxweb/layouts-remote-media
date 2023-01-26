@@ -32,7 +32,7 @@ You can manually configure cache pool as well as desired TTL:
 
 
 ```yaml
-netgen_remote_media:
+netgen_layouts_remote_media:
     cache:
         pool: cache.app
         ttl: 7200

@@ -1,8 +1,10 @@
 # Netgen Layouts & Remote Media integration
 
-## Installation instructions
+## Installation & upgrade instructions
 
 [INSTALL.md](INSTALL.md)
+
+[UPGRADE.md](UPGRADE.md)
 
 ## Running tests
 
