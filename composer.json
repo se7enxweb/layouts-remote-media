@@ -11,7 +11,7 @@
     ],
     "require": {
         "netgen/layouts-core": "^1.4",
-        "netgen/remote-media-bundle": "dev-NGGW-41-ngrm-symfony-form",
+        "netgen/remote-media-bundle": "dev-NGSTACK-533-local-resource-storage",
         "matthiasnoback/symfony-dependency-injection-test": "^4.3"
     },
     "require-dev": {
