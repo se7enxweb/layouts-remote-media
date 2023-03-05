@@ -29,6 +29,7 @@ final class RemoteMediaItemTest extends TestCase
 
         $location = new RemoteResourceLocation(
             $resource,
+            'netgen_layouts',
             [
                 new CropSettings('small', 50, 80, 800, 400),
                 new CropSettings('medium', 30, 50, 1200, 600),

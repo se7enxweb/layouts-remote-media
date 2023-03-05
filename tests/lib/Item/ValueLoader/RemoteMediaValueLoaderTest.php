@@ -55,7 +55,7 @@ final class RemoteMediaValueLoaderTest extends TestCase
             'name' => 'test_resource',
         ]);
 
-        $location = new RemoteResourceLocation($resource);
+        $location = new RemoteResourceLocation($resource, 'netgen_layouts_value');
 
         $remoteMediaItem = new RemoteMediaItem('upload||video||folder|test_resource', $location);
 
@@ -83,7 +83,7 @@ final class RemoteMediaValueLoaderTest extends TestCase
             'name' => 'test_resource',
         ]);
 
-        $location = new RemoteResourceLocation($resource);
+        $location = new RemoteResourceLocation($resource, 'netgen_layouts_value');
 
         $this->remoteMediaItemRepositoryMock
             ->expects(self::once())
@@ -134,7 +134,7 @@ final class RemoteMediaValueLoaderTest extends TestCase
             'name' => 'test_resource',
         ]);
 
-        $location = new RemoteResourceLocation($resource);
+        $location = new RemoteResourceLocation($resource, 'netgen_layouts_value');
 
         $this->remoteMediaItemRepositoryMock
             ->expects(self::once())
@@ -218,7 +218,7 @@ final class RemoteMediaValueLoaderTest extends TestCase
             'name' => 'test_resource',
         ]);
 
-        $location = new RemoteResourceLocation($resource);
+        $location = new RemoteResourceLocation($resource, 'netgen_layouts_value');
 
         $remoteMediaItem = new RemoteMediaItem('upload||video||folder|test_resource', $location);
 

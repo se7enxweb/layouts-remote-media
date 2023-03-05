@@ -38,7 +38,7 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
         if (!$remoteMediaItem instanceof RemoteMediaItem) {
             try {
                 $remoteResource = $this->resolveRemoteResource($query);
-                $remoteResourceLocation = new RemoteResourceLocation($remoteResource);
+                $remoteResourceLocation = new RemoteResourceLocation($remoteResource, 'netgen_layouts_value');
 
                 $this->provider->store($remoteResource);
                 $remoteResourceLocation = $this->provider->storeLocation($remoteResourceLocation);
