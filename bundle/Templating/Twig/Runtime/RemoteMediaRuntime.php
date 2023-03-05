@@ -37,7 +37,7 @@ final class RemoteMediaRuntime extends AbstractExtension
                 $variation,
                 [],
                 true,
-                $useThumbnail
+                $useThumbnail,
             );
         }
 
@@ -45,7 +45,7 @@ final class RemoteMediaRuntime extends AbstractExtension
             $remoteResourceLocation->getRemoteResource(),
             [],
             true,
-            $useThumbnail
+            $useThumbnail,
         );
     }
 
@@ -58,7 +58,7 @@ final class RemoteMediaRuntime extends AbstractExtension
                 $variation,
                 [],
                 true,
-                $useThumbnail
+                $useThumbnail,
             );
         }
 
@@ -66,7 +66,7 @@ final class RemoteMediaRuntime extends AbstractExtension
             $remoteResourceLocation->getRemoteResource(),
             [],
             true,
-            $useThumbnail
+            $useThumbnail,
         );
     }
 }

@@ -10,7 +10,9 @@ use Netgen\RemoteMedia\API\Values\TimestampableTrait;
 
 /**
  * @ORM\Entity
+ *
  * @ORM\Table(name="nglayouts_remote_media_item")
+ *
  * @ORM\HasLifecycleCallbacks()
  */
 class RemoteMediaItem
@@ -19,7 +21,9 @@ class RemoteMediaItem
 
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer")
      */
     private ?int $id = null;
@@ -31,6 +35,7 @@ class RemoteMediaItem
 
     /**
      * @ORM\OneToOne(targetEntity="Netgen\RemoteMedia\API\Values\RemoteResourceLocation")
+     *
      * @ORM\JoinColumn(name="remote_resource_location_id", referencedColumnName="id")
      */
     private RemoteResourceLocation $remoteResourceLocation;
