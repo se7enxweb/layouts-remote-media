@@ -106,6 +106,35 @@ final class RemoteMediaRuntimeTest extends TestCase
         ]);
 
         $location = new RemoteResourceLocation($resource);
+        $tagString = '<video src="https://cloudinary.com/upload/test_resource">';
+
+        $this->providerMock
+            ->expects(self::once())
+            ->method('generateHtmlTag')
+            ->with($resource, [], true, false)
+            ->willReturn($tagString);
+
+        self::assertSame(
+            $tagString,
+            $this->runtime->getBlockTag($location),
+        );
+    }
+
+    /**
+     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::__construct
+     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::getBlockTag
+     */
+    public function testGetBlockTagWithVariation(): void
+    {
+        $resource = new RemoteResource([
+            'type' => RemoteResource::TYPE_VIDEO,
+            'remoteId' => 'upload|video|folder/test_resource',
+            'url' => 'https://cloudinary.com/test/upload/video/folder/test_resource',
+            'folder' => Folder::fromPath('folder'),
+            'name' => 'test_resource',
+        ]);
+
+        $location = new RemoteResourceLocation($resource);
         $tagString = '<video src="https://cloudinary.com/upload/some_variation_config/test_resource">';
 
         $this->providerMock
@@ -125,6 +154,35 @@ final class RemoteMediaRuntimeTest extends TestCase
      * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::getItemTag
      */
     public function testGetItemTag(): void
+    {
+        $resource = new RemoteResource([
+            'type' => RemoteResource::TYPE_VIDEO,
+            'remoteId' => 'upload|image|folder/example',
+            'url' => 'https://cloudinary.com/test/upload/image/folder/example',
+            'folder' => Folder::fromPath('folder'),
+            'name' => 'example',
+        ]);
+
+        $location = new RemoteResourceLocation($resource);
+        $tagString = '<img src="https://cloudinary.com/upload/some_variation_config/example">';
+
+        $this->providerMock
+            ->expects(self::once())
+            ->method('generateHtmlTag')
+            ->with($resource, [], true, true)
+            ->willReturn($tagString);
+
+        self::assertSame(
+            $tagString,
+            $this->runtime->getItemTag($location, null, true),
+        );
+    }
+
+    /**
+     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::__construct
+     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::getItemTag
+     */
+    public function testGetItemTagWithVariation(): void
     {
         $resource = new RemoteResource([
             'type' => RemoteResource::TYPE_VIDEO,

@@ -30,11 +30,43 @@ final class RemoteMediaRuntime extends AbstractExtension
 
     public function getBlockTag(RemoteResourceLocation $remoteResourceLocation, ?string $variation = null, bool $useThumbnail = false): string
     {
-        return $this->provider->generateVariationHtmlTag($remoteResourceLocation, 'netgen_layouts_block', $variation, [], true, $useThumbnail);
+        if ($variation) {
+            return $this->provider->generateVariationHtmlTag(
+                $remoteResourceLocation,
+                'netgen_layouts_block',
+                $variation,
+                [],
+                true,
+                $useThumbnail
+            );
+        }
+
+        return $this->provider->generateHtmlTag(
+            $remoteResourceLocation->getRemoteResource(),
+            [],
+            true,
+            $useThumbnail
+        );
     }
 
     public function getItemTag(RemoteResourceLocation $remoteResourceLocation, ?string $variation = null, bool $useThumbnail = false): string
     {
-        return $this->provider->generateVariationHtmlTag($remoteResourceLocation, 'netgen_layouts_item', $variation, [], true, $useThumbnail);
+        if ($variation) {
+            return $this->provider->generateVariationHtmlTag(
+                $remoteResourceLocation,
+                'netgen_layouts_item',
+                $variation,
+                [],
+                true,
+                $useThumbnail
+            );
+        }
+
+        return $this->provider->generateHtmlTag(
+            $remoteResourceLocation->getRemoteResource(),
+            [],
+            true,
+            $useThumbnail
+        );
     }
 }
