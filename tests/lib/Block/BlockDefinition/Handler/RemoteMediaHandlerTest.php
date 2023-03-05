@@ -140,9 +140,9 @@ final class RemoteMediaHandlerTest extends TestCase
 
         $this->handler->getDynamicParameters($params, $block);
 
-        self::assertSame($value->getRemoteId(), $params['resource']->getRemoteId());
-        self::assertSame($value->getType(), $params['resource']->getType());
-        self::assertSame($value->getUrl(), $params['resource']->getUrl());
+        self::assertSame($value->getRemoteId(), $params['remote_resource_location']->getRemoteId());
+        self::assertSame($value->getType(), $params['remote_resource_location']->getType());
+        self::assertSame($value->getUrl(), $params['remote_resource_location']->getUrl());
     }
 
     /**
@@ -178,6 +178,6 @@ final class RemoteMediaHandlerTest extends TestCase
 
         $this->handler->getDynamicParameters($params, $block);
 
-        self::assertNull($params['resource']);
+        self::assertNull($params['remote_resource_location']);
     }
 }
