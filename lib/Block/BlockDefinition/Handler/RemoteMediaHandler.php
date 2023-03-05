@@ -68,14 +68,14 @@ final class RemoteMediaHandler extends BlockDefinitionHandler
 
     public function getDynamicParameters(DynamicParameters $params, Block $block): void
     {
-        $params['resource'] = null;
+        $params['remote_resource_location'] = null;
 
         if ($block->getParameter('remote_media')->isEmpty()) {
             return;
         }
 
         $remoteMediaId = $block->getParameter('remote_media')->getValue();
-        $params['resource'] = $this->valueLoader->load($remoteMediaId);
+        $params['remote_resource_location'] = $this->valueLoader->load($remoteMediaId);
     }
 
     /**

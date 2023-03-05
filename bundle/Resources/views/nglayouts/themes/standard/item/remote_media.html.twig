@@ -1,8 +1,7 @@
-{% set resource_location = item.object %}
-{% set resource = item.object.remoteResource %}
+{% set remote_resource_location = item.object %}
 
-{% if resource %}
+{% if remote_resource_location %}
     <div class="remote-media">
-        {{ netgen_layouts_remote_media_item_tag(resource_location, view_type)|raw }}
+        {{ netgen_layouts_remote_media_item_tag(remote_resource_location, view_type)|raw }}
     </div>
 {% endif %}

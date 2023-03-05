@@ -5,36 +5,32 @@
 {% trans_default_domain 'nglayouts_app' %}
 
 {% block content %}
-    {% set resource = block.dynamicParameter('resource') %}
+    {% set remote_resource_location= block.dynamicParameter('remote_resource_location') %}
 
-    {% if resource %}
+    {% if remote_resource_location %}
         <div class="image">
-            {% if resource.type == 'image' %}
-                <img src="{{ resource.url }}" />
-            {% elseif resource.type == 'video' %}
-                {% set thumbnail = ngrm_video_thumbnail(resource).url %}
-
-                {% if thumbnail %}
-                    <img src="{{ thumbnail }}" />
-                {% else %}
-                    <i class="material-icons" aria-hidden="true">audiotrack</i>
-                {% endif %}
+            {% if remote_resource_location.remoteResource.type == 'image' %}
+                {{ netgen_layouts_remote_media_block_tag(remote_resource_location, 'admin_preview')|raw }}
+            {% elseif remote_resource_location.remoteResource.type == 'video' %}
+                {{ netgen_layouts_remote_media_block_tag(remote_resource_location, 'admin_preview', true)|raw }}
+            {% elseif remote_resource_location.remoteResource.type == 'audio' %}
+                <i class="material-icons" aria-hidden="true">audiotrack</i>
             {% else %}
                 <i class="material-icons" aria-hidden="true">insert_drive_file</i>
             {% endif %}
         </div>
 
         <div class="name">
-            <p>{{ resource.remoteId }}</p>
+            <p>{{ remote_resource_location.remoteResource.name }}</p>
         </div>
 
         <div class="value-type">
             <p>
                 Remote media:
-                {{ resource.type }}
+                {{ remote_resource_location.remoteResource.type }}
 
-                {% if resource.metaData.format is defined and resource.metaData.format %}
-                    / {{ resource.metaData.format }}
+                {% if remote_resource_location.remoteResource.hasMetadataProperty('format') %}
+                    / {{ remote_resource_location.remoteResource.getMetadataProperty('format') }}
                 {% endif %}
             </p>
         </div>

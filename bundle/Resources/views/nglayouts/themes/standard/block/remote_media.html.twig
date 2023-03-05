@@ -2,12 +2,12 @@
 
 {% block content %}
     {% block remote_media %}
-        {% set resource = block.dynamicParameter('resource') %}
+        {% set remote_resource_location = block.dynamicParameter('remote_resource_location') %}
         {% set variation = block.parameter('variation').value %}
 
-        {% if resource %}
+        {% if remote_resource_location %}
             <div class="remote-media">
-                {{ netgen_layouts_remote_media_block_tag(resource_location, variation)|raw }}
+                {{ netgen_layouts_remote_media_block_tag(remote_resource_location, variation)|raw }}
             </div>
         {% endif %}
     {% endblock %}
