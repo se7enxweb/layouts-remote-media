@@ -17,6 +17,8 @@ use function explode;
 use function implode;
 use function json_decode;
 use function json_encode;
+use function mb_strlen;
+use function mb_substr;
 use function sprintf;
 
 use const PHP_EOL;
