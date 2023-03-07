@@ -1,4 +1,12 @@
 services:
+    netgen_layouts.remote_media.override.content_browser.item_serializer:
+        class: Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Serializer\ItemSerializer
+        decorates: netgen_content_browser.item_serializer
+        arguments:
+            - "@netgen_layouts.remote_media.override.content_browser.item_serializer.inner"
+            - "@netgen_content_browser.backend"
+            - "@netgen_content_browser.column_provider"
+
     netgen_layouts.remote_media.browser.backend.remote_media:
         class: Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend
         arguments:
