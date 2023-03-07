@@ -27,14 +27,18 @@ Above shown are the default used parameters. For more information about creating
 
 ### Database changes
 
-#### Doctrine migrations
+#### Import new database tables
 
-Version 2 stores used resources in a separate table in the database. To get those changes, you can use Doctrine migrations:
+Version 2 stores used resources in a separate table in the database. Use the following command to add the tables to your database:
 
 ```
-php bin/console doctrine:migrations:migrate
+ mysql -u<user> -p<password> -h<host> <db_name> < vendor/netgen/layouts-remote-media/bundle/Resources/sql/mysql/schema.sql
 ```
 
 #### Database values migration
 
-The structure of the database has slightly changed and currently added items and blocks won't work with the version 2. You have to run a command which will automatically fix this for you.
+The structure of the database has slightly changed and currently added items and blocks won't work with the version 2. You have to run a command which will automatically fix this for you:
+
+```php
+php bin/console netgen-layouts:remote-media:migrate-v1-to-v2
+```
