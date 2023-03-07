@@ -42,8 +42,10 @@ Above shown are the default used parameters. For more information about creating
 
 ## Import database tables
 
-This bundle stores used resources in a separate table in the database. Use the following command to add the tables to your database:
+This bundle stores used resources in a separate table in the database. Use the following command to update your database:
 
 ```
- mysql -u<user> -p<password> -h<host> <db_name> < vendor/netgen/layouts-remote-media/bundle/Resources/sql/mysql/schema.sql
+php bin/console doctrine:schema:update
 ```
+
+**Note:** Use the command with `--dump-sql` first to check that it will do only modifications related to this bundle, and then use it with parameter `--force` to do the actual changes.
