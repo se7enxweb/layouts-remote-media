@@ -1,0 +1,7 @@
+services:
+    netgen_layouts.remote_media.command.migrate_data_v1_to_v2:
+        class: Netgen\Bundle\LayoutsRemoteMediaBundle\Command\MigrateDataV1ToV2Command
+        arguments:
+            - "@database_connection"
+        tags:
+            - { name: console.command }
