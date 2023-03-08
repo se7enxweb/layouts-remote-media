@@ -28,6 +28,7 @@ final class NetgenLayoutsRemoteMediaExtensionTest extends AbstractExtensionTestC
         ];
     }
 
+    /** @return array<string,array> */
     protected function getMinimalConfiguration(): array
     {
         return [

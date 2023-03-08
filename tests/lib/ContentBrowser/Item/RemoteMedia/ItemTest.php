@@ -97,6 +97,16 @@ final class ItemTest extends TestCase
             $this->item->getRemoteResourceLocation()->getRemoteResource()->getUrl(),
         );
 
+        self::assertInstanceOf(
+            Folder::class,
+            $this->location->getRemoteResource()->getFolder(),
+        );
+
+        self::assertInstanceOf(
+            Folder::class,
+            $this->item->getRemoteResourceLocation()->getRemoteResource()->getFolder(),
+        );
+
         self::assertSame(
             $this->location->getRemoteResource()->getFolder()->getPath(),
             $this->item->getRemoteResourceLocation()->getRemoteResource()->getFolder()->getPath(),

@@ -96,7 +96,11 @@ final class LocationTest extends TestCase
     public function testGetFolder(): void
     {
         self::assertNull($this->sectionLocation->getFolder());
+
+        self::assertInstanceOf(Folder::class, $this->folderLocation->getFolder());
         self::assertSame('some/folder/path', $this->folderLocation->getFolder()->getPath());
+
+        self::assertInstanceOf(Folder::class, $this->location->getFolder());
         self::assertSame('some/folder/path', $this->location->getFolder()->getPath());
     }
 
@@ -167,6 +171,7 @@ final class LocationTest extends TestCase
         $location = Location::createFromFolder(Folder::fromPath('test/subtest'));
 
         self::assertSame(Location::RESOURCE_TYPE_ALL, $location->getType());
+        self::assertInstanceOf(Folder::class, $location->getFolder());
         self::assertSame('test/subtest', $location->getFolder()->getPath());
         self::assertSame('all||test', $location->getParentId());
     }
