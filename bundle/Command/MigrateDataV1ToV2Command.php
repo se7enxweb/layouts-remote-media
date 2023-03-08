@@ -23,7 +23,7 @@ use function sprintf;
 
 use const PHP_EOL;
 
-class MigrateDataV1ToV2Command extends Command
+final class MigrateDataV1ToV2Command extends Command
 {
     private const REMOTE_MEDIA_BLOCK_DEFINITION = 'remote_media';
 
