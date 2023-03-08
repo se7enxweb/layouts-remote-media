@@ -63,7 +63,7 @@ final class MigrateDataV1ToV2Command extends Command
         $this->processItems();
         $this->processBlockTranslationsWithLink();
 
-        return Command::SUCCESS;
+        return 0;
     }
 
     private function processBlockTranslations(): void
@@ -135,7 +135,7 @@ final class MigrateDataV1ToV2Command extends Command
             )
             ->setParameter('definition_identifier', self::REMOTE_MEDIA_BLOCK_DEFINITION, Types::STRING);
 
-        return $query->executeQuery()->fetchAllAssociative();
+        return $query->execute()->fetchAllAssociative();
     }
 
     /**
@@ -151,7 +151,7 @@ final class MigrateDataV1ToV2Command extends Command
             )
             ->setParameter('value_type', self::REMOTE_MEDIA_ITEM_DEFINITION, Types::STRING);
 
-        return $query->executeQuery()->fetchAllAssociative();
+        return $query->execute()->fetchAllAssociative();
     }
 
     /**
@@ -171,7 +171,7 @@ final class MigrateDataV1ToV2Command extends Command
                 Types::STRING,
             );
 
-        return $query->executeQuery()->fetchAllAssociative();
+        return $query->execute()->fetchAllAssociative();
     }
 
     private function convertValue(string $value): string
@@ -245,7 +245,7 @@ final class MigrateDataV1ToV2Command extends Command
             ->setParameter('status', $blockTranslation['status'], Types::STRING)
             ->setParameter('parameters', $blockTranslation['parameters'], Types::STRING);
 
-        $query->executeQuery();
+        $query->execute();
     }
 
     /**
@@ -263,6 +263,6 @@ final class MigrateDataV1ToV2Command extends Command
             ->setParameter('id', $item['id'], Types::INTEGER)
             ->setParameter('value', $item['value'], Types::STRING);
 
-        $query->executeQuery();
+        $query->execute();
     }
 }

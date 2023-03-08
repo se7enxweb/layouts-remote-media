@@ -8,4 +8,5 @@ includes:
 parameters:
     ignoreErrors:
         # Doctrine DBAL
+        - '#Cannot call method fetchAllAssociative\(\) on Doctrine\\DBAL\\Result\|int#'
         - '#expects string\|null, Doctrine\\DBAL\\Query\\Expression\\CompositeExpression given#'

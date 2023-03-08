@@ -90,15 +90,17 @@ final class Location implements LocationInterface
 
     public function getParentId(): ?string
     {
-        if (!$this->getFolder() instanceof Folder) {
+        $folder = $this->getFolder();
+        if (!$folder instanceof Folder) {
             return null;
         }
 
-        if (!$this->getFolder()->getParent() instanceof Folder) {
+        $parent = $folder->getParent();
+        if (!$parent instanceof Folder) {
             return $this->getType();
         }
 
-        return self::createFromFolder($this->getFolder()->getParent(), $this->getType())->getLocationId();
+        return self::createFromFolder($parent, $this->getType())->getLocationId();
     }
 
     public function getFolder(): ?Folder
