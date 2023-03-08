@@ -4,3 +4,8 @@ includes:
     - vendor/phpstan/phpstan-doctrine/rules.neon
     - vendor/phpstan/phpstan-symfony/extension.neon
     - vendor/phpstan/phpstan-symfony/rules.neon
+
+parameters:
+    ignoreErrors:
+        # Doctrine DBAL
+        - '#expects string\|null, Doctrine\\DBAL\\Query\\Expression\\CompositeExpression given#'
