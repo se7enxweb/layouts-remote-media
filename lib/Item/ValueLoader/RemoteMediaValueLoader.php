@@ -20,6 +20,7 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
 
     private EntityManagerInterface $entityManager;
 
+    /** @var \Doctrine\ORM\EntityRepository<\Netgen\Layouts\RemoteMedia\API\Values\RemoteMediaItem> */
     private EntityRepository $remoteMediaItemRepository;
 
     public function __construct(ProviderInterface $provider, EntityManagerInterface $entityManager)

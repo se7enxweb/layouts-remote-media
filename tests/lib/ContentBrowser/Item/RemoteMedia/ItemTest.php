@@ -29,6 +29,8 @@ final class ItemTest extends TestCase
         );
 
         $this->item = new Item($this->location);
+
+        parent::setUp();
     }
 
     /**

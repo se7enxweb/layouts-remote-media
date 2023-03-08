@@ -30,7 +30,7 @@ final class RemoteMediaRuntime extends AbstractExtension
 
     public function getBlockTag(RemoteResourceLocation $remoteResourceLocation, ?string $variation = null, bool $useThumbnail = false): string
     {
-        if ($variation) {
+        if ($variation !== null) {
             return $this->provider->generateVariationHtmlTag(
                 $remoteResourceLocation,
                 'netgen_layouts_block',
@@ -51,7 +51,7 @@ final class RemoteMediaRuntime extends AbstractExtension
 
     public function getItemTag(RemoteResourceLocation $remoteResourceLocation, ?string $variation = null, bool $useThumbnail = false): string
     {
-        if ($variation) {
+        if ($variation !== null) {
             return $this->provider->generateVariationHtmlTag(
                 $remoteResourceLocation,
                 'netgen_layouts_item',

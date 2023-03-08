@@ -44,7 +44,7 @@ final class MigrateDataV1ToV2Command extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('netgen-layouts:remote-media:migrate-v1-to-v2')
@@ -52,16 +52,18 @@ final class MigrateDataV1ToV2Command extends Command
             ->setDescription('This command will migrate all the existing blocks and items from v1 to v2');
     }
 
-    protected function initialize(InputInterface $input, OutputInterface $output)
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->output = $output;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->processBlockTranslations();
         $this->processItems();
         $this->processBlockTranslationsWithLink();
+
+        return Command::SUCCESS;
     }
 
     private function processBlockTranslations(): void
@@ -111,6 +113,9 @@ final class MigrateDataV1ToV2Command extends Command
         $progressBar->finish();
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     private function loadBlockTranslations(): array
     {
         $query = $this->connection->createQueryBuilder();
@@ -130,9 +135,12 @@ final class MigrateDataV1ToV2Command extends Command
             )
             ->setParameter('definition_identifier', self::REMOTE_MEDIA_BLOCK_DEFINITION, Types::STRING);
 
-        return $query->execute()->fetchAllAssociative();
+        return $query->executeQuery()->fetchAllAssociative();
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     private function loadItems(): array
     {
         $query = $this->connection->createQueryBuilder();
@@ -143,9 +151,12 @@ final class MigrateDataV1ToV2Command extends Command
             )
             ->setParameter('value_type', self::REMOTE_MEDIA_ITEM_DEFINITION, Types::STRING);
 
-        return $query->execute()->fetchAllAssociative();
+        return $query->executeQuery()->fetchAllAssociative();
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     private function loadBlockTranslationsWithLink(): array
     {
         $query = $this->connection->createQueryBuilder();
@@ -160,7 +171,7 @@ final class MigrateDataV1ToV2Command extends Command
                 Types::STRING,
             );
 
-        return $query->execute()->fetchAllAssociative();
+        return $query->executeQuery()->fetchAllAssociative();
     }
 
     private function convertValue(string $value): string
@@ -173,6 +184,9 @@ final class MigrateDataV1ToV2Command extends Command
         return implode('||', [$type, $resourceType, $resourceId]);
     }
 
+    /**
+     * @param array<string, mixed> $blockTranslation
+     */
     private function processBlockTranslation(array $blockTranslation): void
     {
         $blockParameters = json_decode($blockTranslation['parameters'], true);
@@ -186,6 +200,9 @@ final class MigrateDataV1ToV2Command extends Command
         $this->updateBlockTranslation($blockTranslation);
     }
 
+    /**
+     * @param array<string, mixed> $item
+     */
     private function processItem(array $item): void
     {
         $item['value'] = $this->convertValue($item['value']);
@@ -193,6 +210,9 @@ final class MigrateDataV1ToV2Command extends Command
         $this->updateItem($item);
     }
 
+    /**
+     * @param array<string, mixed> $blockTranslationWithLink
+     */
     private function processLink(array $blockTranslationWithLink): void
     {
         $blockParameters = json_decode($blockTranslationWithLink['parameters'], true);
@@ -206,6 +226,9 @@ final class MigrateDataV1ToV2Command extends Command
         $this->updateBlockTranslation($blockTranslationWithLink);
     }
 
+    /**
+     * @param array<string, mixed> $blockTranslation
+     */
     private function updateBlockTranslation(array $blockTranslation): void
     {
         $query = $this->connection->createQueryBuilder();
@@ -222,9 +245,12 @@ final class MigrateDataV1ToV2Command extends Command
             ->setParameter('status', $blockTranslation['status'], Types::STRING)
             ->setParameter('parameters', $blockTranslation['parameters'], Types::STRING);
 
-        $query->execute();
+        $query->executeQuery();
     }
 
+    /**
+     * @param array<string, mixed> $item
+     */
     private function updateItem(array $item): void
     {
         $query = $this->connection->createQueryBuilder();
@@ -237,6 +263,6 @@ final class MigrateDataV1ToV2Command extends Command
             ->setParameter('id', $item['id'], Types::INTEGER)
             ->setParameter('value', $item['value'], Types::STRING);
 
-        $query->execute();
+        $query->executeQuery();
     }
 }

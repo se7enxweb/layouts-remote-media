@@ -18,11 +18,12 @@ final class CachePoolPass implements CompilerPassInterface
             return;
         }
 
+        /** @var string $cachePoolName */
+        $cachePoolName = $container->getParameter('netgen_layouts.remote_media.cache.pool_name');
+
         $container->setDefinition(
             'netgen_layouts.remote_media.cache.pool',
-            $container->findDefinition(
-                $container->getParameter('netgen_layouts.remote_media.cache.pool_name'),
-            ),
+            $container->findDefinition($cachePoolName),
         );
     }
 }

@@ -13,7 +13,10 @@ final class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('netgen_layouts_remote_media');
-        $this->addCacheConfiguration($treeBuilder->getRootNode());
+
+        /** @var \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode */
+        $rootNode = $treeBuilder->getRootNode();
+        $this->addCacheConfiguration($rootNode);
 
         return $treeBuilder;
     }

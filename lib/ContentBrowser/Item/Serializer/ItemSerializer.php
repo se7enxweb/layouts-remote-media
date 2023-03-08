@@ -36,7 +36,7 @@ final class ItemSerializer implements ItemSerializerInterface
             return $this->innerItemSerializer->serializeItem($item);
         }
 
-        $data = [
+        return [
             'location_id' => null,
             'value' => $item->getValue(),
             'name' => $item->getName(),
@@ -45,13 +45,6 @@ final class ItemSerializer implements ItemSerializerInterface
             'has_sub_items' => false,
             'columns' => $this->columnProvider->provideColumns($item),
         ];
-
-        if ($item instanceof LocationInterface) {
-            $data['location_id'] = $item->getLocationId();
-            $data['has_sub_items'] = true;
-        }
-
-        return $data;
     }
 
     public function serializeLocation(LocationInterface $location): array

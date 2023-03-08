@@ -71,7 +71,7 @@ final class Location implements LocationInterface
 
     public function getName(): string
     {
-        if ($this->name) {
+        if ($this->name !== null) {
             return $this->name;
         }
 
@@ -83,7 +83,7 @@ final class Location implements LocationInterface
 
         array_shift($idParts);
         $folderPath = array_shift($idParts);
-        $pathArray = explode('|', $folderPath);
+        $pathArray = explode('|', $folderPath ?? '|');
 
         return array_pop($pathArray);
     }
