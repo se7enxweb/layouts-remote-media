@@ -14,10 +14,45 @@
     </projectFiles>
 
     <issueHandlers>
+        <!-- Doctrine DBAL -->
+
+        <TooManyArguments>
+            <errorLevel type="suppress">
+                <referencedFunction name="Doctrine\DBAL\Query\QueryBuilder::where" />
+            </errorLevel>
+        </TooManyArguments>
+
+        <ImplicitToStringCast>
+            <errorLevel type="suppress">
+                <file name="bundle/Command/MigrateDataV1ToV2Command.php" />
+            </errorLevel>
+        </ImplicitToStringCast>
+
+        <PossiblyInvalidMethodCall>
+            <errorLevel type="suppress">
+                <file name="bundle/Command/MigrateDataV1ToV2Command.php" />
+            </errorLevel>
+        </PossiblyInvalidMethodCall>
+
+        <!-- Symfony -->
+
+        <PossiblyUndefinedMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::integerNode" />
+            </errorLevel>
+        </PossiblyUndefinedMethod>
+
+        <PossiblyNullReference>
+            <errorLevel type="suppress">
+                <file name="bundle/DependencyInjection/Configuration.php" />
+            </errorLevel>
+        </PossiblyNullReference>
+
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
                 <referencedProperty name="Symfony\Component\Validator\ConstraintValidator::$context" />
                 <referencedProperty name="Symfony\Component\Validator\Constraint::$groups" />
+                <referencedProperty name="Netgen\Bundle\LayoutsRemoteMediaBundle\Command\MigrateDataV1ToV2Command::$output" />
             </errorLevel>
         </PropertyNotSetInConstructor>
     </issueHandlers>
