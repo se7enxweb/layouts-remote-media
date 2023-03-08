@@ -1,10 +1,9 @@
 orm:
     entity_managers:
         default:
-            auto_mapping: false
             mappings:
-                netgen_layouts.remote_media:
-                    type: annotation
+                NetgenLayoutsRemoteMediaBundle:
+                    type: xml
                     prefix: Netgen\Layouts\RemoteMedia\API\Values
-                    dir: "%kernel.root_dir%/../vendor/netgen/layouts-remote-media/lib/API/Values"
+                    dir: "%kernel.project_dir%/vendor/netgen/layouts-remote-media/bundle/Resources/config/doctrine"
                     is_bundle: false

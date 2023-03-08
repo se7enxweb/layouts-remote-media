@@ -4,40 +4,17 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\API\Values;
 
-use Doctrine\ORM\Mapping as ORM;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 use Netgen\RemoteMedia\API\Values\TimestampableTrait;
 
-/**
- * @ORM\Entity
- *
- * @ORM\Table(name="nglayouts_remote_media_item")
- *
- * @ORM\HasLifecycleCallbacks()
- */
 class RemoteMediaItem
 {
     use TimestampableTrait;
 
-    /**
-     * @ORM\Id()
-     *
-     * @ORM\GeneratedValue()
-     *
-     * @ORM\Column(type="integer")
-     */
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(name="value", unique=true, type="string", length=255)
-     */
     private string $value;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Netgen\RemoteMedia\API\Values\RemoteResourceLocation")
-     *
-     * @ORM\JoinColumn(name="remote_resource_location_id", referencedColumnName="id")
-     */
     private RemoteResourceLocation $remoteResourceLocation;
 
     public function __construct(string $value, RemoteResourceLocation $remoteResourceLocation)

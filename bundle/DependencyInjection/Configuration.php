@@ -32,7 +32,6 @@ final class Configuration implements ConfigurationInterface
                             ->defaultValue('cache.app')
                         ->end()
                         ->integerNode('ttl')
-                            ->cannotBeEmpty()
                             ->min(30)
                             ->defaultValue(7200)
                         ->end()
