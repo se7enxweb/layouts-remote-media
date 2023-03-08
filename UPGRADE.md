@@ -6,7 +6,7 @@ Upgrade from 1.0 to 2.0
 
 ### Netgen Remote Media upgrade
 
-Version 2 of this bundle uses Netgen Remote Media version 3 which differs a lot than version 2, which is being used by version 1 of this bundle so first read [Netgen Remote Media upgrade instructions](https://github.com/netgen/NetgenRemoteMediaBundle/blob/NGSTACK-533-local-resource-storage/docs/UPGRADE.md#upgrade-from-20-to-30)!
+Version 2 of this bundle uses Netgen Remote Media version 3 which differs a lot than version 2, which is being used by version 1 of this bundle so first read [Netgen Remote Media upgrade instructions](https://github.com/netgen/NetgenRemoteMediaBundle/blob/3.0/docs/UPGRADE.md#upgrade-from-20-to-30)!
 
 ### Configuration changes
 
