@@ -48,6 +48,7 @@ class MigrateDataV1ToV2Command extends Command
     {
         $this
             ->setName('netgen-layouts:remote-media:migrate-v1-to-v2')
+            ->setHidden(true)
             ->setDescription('This command will migrate all the existing blocks and items from v1 to v2');
     }
 
