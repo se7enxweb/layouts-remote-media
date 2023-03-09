@@ -13,14 +13,10 @@ class RemoteMediaItem
 
     private ?int $id = null;
 
-    private string $value;
-
-    private RemoteResourceLocation $remoteResourceLocation;
-
-    public function __construct(string $value, RemoteResourceLocation $remoteResourceLocation)
-    {
-        $this->value = $value;
-        $this->remoteResourceLocation = $remoteResourceLocation;
+    public function __construct(
+        private string $value,
+        private RemoteResourceLocation $remoteResourceLocation
+    ) {
     }
 
     public function getId(): ?int

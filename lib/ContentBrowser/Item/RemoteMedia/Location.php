@@ -29,21 +29,11 @@ final class Location implements LocationInterface
         RemoteResource::TYPE_OTHER,
     ];
 
-    private string $id;
-
-    private ?string $name;
-
-    private function __construct(string $id, ?string $name = null)
-    {
-        $idParts = explode('||', $id);
-        $type = array_shift($idParts);
-
-        if (!in_array($type, self::SUPPORTED_TYPES, true) && $type !== self::RESOURCE_TYPE_ALL) {
-            throw new InvalidArgumentException('Provided ID ' . $id . ' is invalid');
-        }
-
-        $this->id = $id;
-        $this->name = $name;
+    private function __construct(
+        private string $id,
+        private ?string $name = null
+    ) {
+        $this->validateId($id);
     }
 
     public static function createFromId(string $id): self
@@ -119,5 +109,15 @@ final class Location implements LocationInterface
         $idParts = explode('||', $this->id);
 
         return array_shift($idParts);
+    }
+
+    private function validateId(string $id): void
+    {
+        $idParts = explode('||', $id);
+        $type = array_shift($idParts);
+
+        if (!in_array($type, self::SUPPORTED_TYPES, true) && $type !== self::RESOURCE_TYPE_ALL) {
+            throw new InvalidArgumentException('Provided ID ' . $id . ' is invalid');
+        }
     }
 }

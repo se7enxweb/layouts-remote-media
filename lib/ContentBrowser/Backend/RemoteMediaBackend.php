@@ -31,24 +31,12 @@ use function sprintf;
 
 final class RemoteMediaBackend implements BackendInterface
 {
-    private ProviderInterface $provider;
-
-    private NextCursorResolverInterface $nextCursorResolver;
-
-    private TranslatorInterface $translator;
-
-    private Configuration $config;
-
     public function __construct(
-        ProviderInterface $provider,
-        NextCursorResolverInterface $nextCursorResolver,
-        TranslatorInterface $translator,
-        Configuration $config
+        private ProviderInterface $provider,
+        private NextCursorResolverInterface $nextCursorResolver,
+        private TranslatorInterface $translator,
+        private Configuration $config
     ) {
-        $this->provider = $provider;
-        $this->nextCursorResolver = $nextCursorResolver;
-        $this->translator = $translator;
-        $this->config = $config;
     }
 
     public function getSections(): iterable

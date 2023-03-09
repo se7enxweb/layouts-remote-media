@@ -14,20 +14,11 @@ use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
 
 final class ItemSerializer implements ItemSerializerInterface
 {
-    private BackendInterface $backend;
-
-    private ColumnProviderInterface $columnProvider;
-
-    private ItemSerializerInterface $innerItemSerializer;
-
     public function __construct(
-        ItemSerializerInterface $innerItemSerializer,
-        BackendInterface $backend,
-        ColumnProviderInterface $columnProvider
+        private ItemSerializerInterface $innerItemSerializer,
+        private BackendInterface $backend,
+        private ColumnProviderInterface $columnProvider
     ) {
-        $this->innerItemSerializer = $innerItemSerializer;
-        $this->backend = $backend;
-        $this->columnProvider = $columnProvider;
     }
 
     public function serializeItem(ItemInterface $item): array

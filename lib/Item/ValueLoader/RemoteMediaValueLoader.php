@@ -16,17 +16,13 @@ use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 
 final class RemoteMediaValueLoader implements ValueLoaderInterface
 {
-    private ProviderInterface $provider;
-
-    private EntityManagerInterface $entityManager;
-
     /** @var \Doctrine\ORM\EntityRepository<\Netgen\Layouts\RemoteMedia\API\Values\RemoteMediaItem> */
     private EntityRepository $remoteMediaItemRepository;
 
-    public function __construct(ProviderInterface $provider, EntityManagerInterface $entityManager)
-    {
-        $this->provider = $provider;
-        $this->entityManager = $entityManager;
+    public function __construct(
+        private ProviderInterface $provider,
+        private EntityManagerInterface $entityManager
+    ) {
         $this->remoteMediaItemRepository = $entityManager->getRepository(RemoteMediaItem::class);
     }
 

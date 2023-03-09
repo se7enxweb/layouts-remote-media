@@ -11,11 +11,9 @@ use function str_replace;
 
 final class Item implements ItemInterface
 {
-    private RemoteResourceLocation $location;
-
-    public function __construct(RemoteResourceLocation $location)
-    {
-        $this->location = $location;
+    public function __construct(
+        private RemoteResourceLocation $location
+    ) {
     }
 
     public function getValue(): string

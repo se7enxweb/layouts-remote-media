@@ -11,11 +11,9 @@ use function str_replace;
 
 final class ResourceQuery
 {
-    private string $value;
-
-    private function __construct(string $value)
-    {
-        $this->value = $value;
+    private function __construct(
+        private string $value
+    ) {
     }
 
     public static function createFromValue(string $value): self

@@ -16,11 +16,9 @@ use function is_string;
 
 final class RemoteMediaValidator extends ConstraintValidator
 {
-    private ProviderInterface $provider;
-
-    public function __construct(ProviderInterface $provider)
-    {
-        $this->provider = $provider;
+    public function __construct(
+        private ProviderInterface $provider
+    ) {
     }
 
     /**

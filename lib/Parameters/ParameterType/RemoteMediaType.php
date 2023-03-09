@@ -11,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints;
 
 /**
- * Parameter type used to store and validate a ID and type of a resource in RemoteMedia.
+ * Parameter type used to store and validate an ID and type of resource in RemoteMedia.
  */
 final class RemoteMediaType extends ParameterType
 {

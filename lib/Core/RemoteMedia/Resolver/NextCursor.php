@@ -15,14 +15,10 @@ use function trim;
 
 final class NextCursor implements NextCursorResolverInterface
 {
-    private CacheItemPoolInterface $cache;
-
-    private int $ttl;
-
-    public function __construct(CacheItemPoolInterface $cache, int $ttl = 7200)
-    {
-        $this->cache = $cache;
-        $this->ttl = $ttl;
+    public function __construct(
+        private CacheItemPoolInterface $cache,
+        private int $ttl = 7200
+    ) {
     }
 
     public function resolve(Query $query, int $offset): string

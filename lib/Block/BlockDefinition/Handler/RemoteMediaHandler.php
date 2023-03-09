@@ -18,26 +18,14 @@ final class RemoteMediaHandler extends BlockDefinitionHandler
 {
     private const LAYOUTS_BLOCK_VARIATIONS = 'netgen_layouts_block';
 
-    private ValueLoaderInterface $valueLoader;
-
-    private VariationResolver $variationResolver;
-
-    /**
-     * @var string[]
-     */
-    private array $allowedResourceTypes;
-
     /**
      * @param string[] $allowedResourceTypes
      */
     public function __construct(
-        ValueLoaderInterface $valueLoader,
-        VariationResolver $variationResolver,
-        array $allowedResourceTypes
+        private ValueLoaderInterface $valueLoader,
+        private VariationResolver $variationResolver,
+        private array $allowedResourceTypes
     ) {
-        $this->valueLoader = $valueLoader;
-        $this->variationResolver = $variationResolver;
-        $this->allowedResourceTypes = $allowedResourceTypes;
     }
 
     public function buildParameters(ParameterBuilderInterface $builder): void
