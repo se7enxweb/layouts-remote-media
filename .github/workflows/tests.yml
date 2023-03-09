@@ -31,7 +31,6 @@ jobs:
         exclude:
           - php: '8.0'
             symfony: '~6.2.0'
-            deps: 'low'
 
     steps:
       - uses: actions/checkout@v3
