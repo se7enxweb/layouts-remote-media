@@ -25,11 +25,12 @@ final class TypeTest extends TestCase
      */
     public function testGetValue(): void
     {
-        $resource = new RemoteResource([
-            'remoteId' => 'folder/test_resource',
-            'type' => 'image',
-            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'folder/test_resource',
+            type: RemoteResource::TYPE_IMAGE,
+            url: 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            md5: 'fd03486b8f6fcdf3d60fd124465ec8d8',
+        );
 
         $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
@@ -41,12 +42,13 @@ final class TypeTest extends TestCase
      */
     public function testGetValueWithFormat(): void
     {
-        $resource = new RemoteResource([
-            'remoteId' => 'folder/test_resource',
-            'type' => 'video',
-            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
-            'metadata' => ['format' => 'mp4'],
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'folder/test_resource',
+            type: RemoteResource::TYPE_VIDEO,
+            url: 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            md5: 'ddd1248ff21c4f16c5839fffe3f6a51d',
+            metadata: ['format' => 'mp4'],
+        );
 
         $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 

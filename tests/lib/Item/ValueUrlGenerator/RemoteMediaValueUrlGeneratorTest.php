@@ -23,11 +23,12 @@ final class RemoteMediaValueUrlGeneratorTest extends TestCase
      */
     public function testGenerate(): void
     {
-        $resource = new RemoteResource([
-            'type' => RemoteResource::TYPE_VIDEO,
-            'remoteId' => 'upload|video|folder/test_resource',
-            'url' => 'https://cloudinary.com/test/upload/video/folder/test_resource',
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'upload|video|folder/test_resource',
+            type: RemoteResource::TYPE_VIDEO,
+            url: 'https://cloudinary.com/test/upload/video/folder/test_resource',
+            md5: '25bd63baf9c2509af5c2d33a65da98ce',
+        );
 
         $location = new RemoteResourceLocation($resource);
 

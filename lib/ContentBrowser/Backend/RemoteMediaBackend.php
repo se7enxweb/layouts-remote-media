@@ -102,11 +102,11 @@ final class RemoteMediaBackend implements BackendInterface
              [$location->getType()]
             : $this->getAllowedTypes();
 
-        $query = new Query([
-            'types' => $types,
-            'limit' => $limit,
-            'folders' => $location->getFolder() instanceof Folder ? [$location->getFolder()] : [],
-        ]);
+        $query = new Query(
+            types: $types,
+            folders: $location->getFolder() instanceof Folder ? [$location->getFolder()] : [],
+            limit: $limit,
+        );
 
         if ($offset > 0) {
             $nextCursor = $this->nextCursorResolver->resolve($query, $offset);
@@ -138,11 +138,11 @@ final class RemoteMediaBackend implements BackendInterface
             [$location->getType()]
             : $this->getAllowedTypes();
 
-        $query = new Query([
-            'types' => $types,
-            'limit' => 0,
-            'folders' => $location->getFolder() instanceof Folder ? [$location->getFolder()] : [],
-        ]);
+        $query = new Query(
+            types: $types,
+            folders: $location->getFolder() instanceof Folder ? [$location->getFolder()] : [],
+            limit: 0,
+        );
 
         return $this->provider->searchCount($query);
     }
@@ -162,12 +162,12 @@ final class RemoteMediaBackend implements BackendInterface
                 : [];
         }
 
-        $query = new Query([
-            'query' => $searchQuery->getSearchText(),
-            'types' => $types,
-            'folders' => $folders,
-            'limit' => $searchQuery->getLimit(),
-        ]);
+        $query = new Query(
+            query: $searchQuery->getSearchText(),
+            types: $types,
+            folders: $folders,
+            limit: $searchQuery->getLimit(),
+        );
 
         if ($searchQuery->getOffset() > 0) {
             $nextCursor = $this->nextCursorResolver->resolve($query, $searchQuery->getOffset());
@@ -204,12 +204,12 @@ final class RemoteMediaBackend implements BackendInterface
                 : [];
         }
 
-        $query = new Query([
-            'query' => $searchQuery->getSearchText(),
-            'types' => $types,
-            'folders' => $folders,
-            'limit' => $searchQuery->getLimit(),
-        ]);
+        $query = new Query(
+            query: $searchQuery->getSearchText(),
+            types: $types,
+            folders: $folders,
+            limit: $searchQuery->getLimit(),
+        );
 
         return $this->provider->searchCount($query);
     }

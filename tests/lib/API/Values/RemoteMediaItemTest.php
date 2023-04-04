@@ -20,13 +20,13 @@ final class RemoteMediaItemTest extends TestCase
      */
     public function test(): void
     {
-        $resource = new RemoteResource([
-            'remoteId' => 'upload|image|media/example',
-            'type' => 'image',
-            'url' => 'https://cloudinary.com/test/upload/image/media/example',
-            'name' => 'example',
-        ]);
-
+        $resource = new RemoteResource(
+            remoteId: 'upload|image|media/example',
+            type: RemoteResource::TYPE_IMAGE,
+            url: 'https://cloudinary.com/test/upload/image/media/example',
+            md5: '1160cdbeea28403049e282452a4c27ff',
+            name: 'example',
+        );
         $location = new RemoteResourceLocation(
             $resource,
             'netgen_layouts',

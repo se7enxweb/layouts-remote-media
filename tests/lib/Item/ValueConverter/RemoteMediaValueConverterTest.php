@@ -27,11 +27,12 @@ final class RemoteMediaValueConverterTest extends TestCase
         self::assertTrue(
             $this->valueConverter->supports(
                 new RemoteResourceLocation(
-                    new RemoteResource([
-                        'type' => 'image',
-                        'remoteId' => 'upload|image|folder/test_resource',
-                        'url' => 'https://cloudinary.com/test/upload/folder/test_resource',
-                    ]),
+                    new RemoteResource(
+                        remoteId: 'upload|image|folder/test_resource',
+                        type: RemoteResource::TYPE_IMAGE,
+                        url: 'https://cloudinary.com/test/upload/folder/test_resource',
+                        md5: '82af8fbba84fe6a67fce84584a4c72dd',
+                    ),
                 ),
             ),
         );
@@ -48,11 +49,12 @@ final class RemoteMediaValueConverterTest extends TestCase
             'remote_media',
             $this->valueConverter->getValueType(
                 new RemoteResourceLocation(
-                    new RemoteResource([
-                        'type' => 'image',
-                        'remoteId' => 'upload|image|folder/test_resource',
-                        'url' => 'https://cloudinary.com/test/upload/folder/test_resource',
-                    ]),
+                    new RemoteResource(
+                        remoteId: 'upload|image|folder/test_resource',
+                        type: RemoteResource::TYPE_IMAGE,
+                        url: 'https://cloudinary.com/test/upload/folder/test_resource',
+                        md5: 'b25af57a577fe6b6f65f1e0f70c69003',
+                    ),
                 ),
             ),
         );
@@ -67,11 +69,12 @@ final class RemoteMediaValueConverterTest extends TestCase
             'upload|image|folder/test_resource',
             $this->valueConverter->getId(
                 new RemoteResourceLocation(
-                    new RemoteResource([
-                        'type' => 'image',
-                        'remoteId' => 'upload|image|folder/test_resource',
-                        'url' => 'https://cloudinary.com/test/upload/folder/test_resource',
-                    ]),
+                    new RemoteResource(
+                        remoteId: 'upload|image|folder/test_resource',
+                        type: RemoteResource::TYPE_IMAGE,
+                        url: 'https://cloudinary.com/test/upload/folder/test_resource',
+                        md5: 'f1f57cad4a9a2f914ae50b11210e9f12',
+                    ),
                 ),
             ),
         );
@@ -86,11 +89,12 @@ final class RemoteMediaValueConverterTest extends TestCase
             'upload|image|folder/test_resource',
             $this->valueConverter->getRemoteId(
                 new RemoteResourceLocation(
-                    new RemoteResource([
-                        'type' => 'image',
-                        'remoteId' => 'upload|image|folder/test_resource',
-                        'url' => 'https://cloudinary.com/test/upload/folder/test_resource',
-                    ]),
+                    new RemoteResource(
+                        remoteId: 'upload|image|folder/test_resource',
+                        type: RemoteResource::TYPE_IMAGE,
+                        url: 'https://cloudinary.com/test/upload/folder/test_resource',
+                        md5: '11057631351990d934c4d524177ad4fc',
+                    ),
                 ),
             ),
         );
@@ -105,11 +109,12 @@ final class RemoteMediaValueConverterTest extends TestCase
             'test_resource',
             $this->valueConverter->getName(
                 new RemoteResourceLocation(
-                    new RemoteResource([
-                        'type' => 'image',
-                        'remoteId' => 'upload|image|folder/test_resource',
-                        'url' => 'https://cloudinary.com/test/upload/folder/test_resource',
-                    ]),
+                    new RemoteResource(
+                        remoteId: 'upload|image|folder/test_resource',
+                        type: RemoteResource::TYPE_IMAGE,
+                        url: 'https://cloudinary.com/test/upload/folder/test_resource',
+                        md5: '42a24da20d5d70df13ea472a459ef865',
+                    ),
                 ),
             ),
         );
@@ -123,11 +128,12 @@ final class RemoteMediaValueConverterTest extends TestCase
         self::assertTrue(
             $this->valueConverter->getIsVisible(
                 new RemoteResourceLocation(
-                    new RemoteResource([
-                        'type' => 'image',
-                        'remoteId' => 'upload|image|folder/test_resource',
-                        'url' => 'https://cloudinary.com/test/upload/folder/test_resource',
-                    ]),
+                    new RemoteResource(
+                        remoteId: 'upload|image|folder/test_resource',
+                        type: RemoteResource::TYPE_IMAGE,
+                        url: 'https://cloudinary.com/test/upload/folder/test_resource',
+                        md5: '88be2ccddf0d9841480b40c9ca599b37',
+                    ),
                 ),
             ),
         );
@@ -139,11 +145,12 @@ final class RemoteMediaValueConverterTest extends TestCase
     public function testGetObject(): void
     {
         $object = new RemoteResourceLocation(
-            new RemoteResource([
-                'type' => 'image',
-                'remoteId' => 'upload|image|folder/test_resource',
-                'url' => 'https://cloudinary.com/test/upload/folder/test_resource',
-            ]),
+            new RemoteResource(
+                remoteId: 'upload|image|folder/test_resource',
+                type: RemoteResource::TYPE_IMAGE,
+                url: 'https://cloudinary.com/test/upload/folder/test_resource',
+                md5: '6be43c2f48d23227c0e2224c54f7fb40',
+            ),
         );
 
         self::assertSame($object, $this->valueConverter->getObject($object));

@@ -26,12 +26,13 @@ final class SizeTest extends TestCase
      */
     public function testGetValueInB(): void
     {
-        $resource = new RemoteResource([
-            'remoteId' => 'folder/test_resource',
-            'type' => 'image',
-            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
-            'size' => 586,
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'folder/test_resource',
+            type: RemoteResource::TYPE_IMAGE,
+            url: 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            md5: '05c849a775800b4d3e63f367594b4099',
+            size: 586,
+        );
 
         $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
@@ -44,12 +45,13 @@ final class SizeTest extends TestCase
      */
     public function testGetValueInkB(): void
     {
-        $resource = new RemoteResource([
-            'remoteId' => 'folder/test_resource',
-            'type' => 'image',
-            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
-            'size' => 1086,
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'folder/test_resource',
+            type: RemoteResource::TYPE_IMAGE,
+            url: 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            md5: 'ef5f9800dbfba3dcf70eea0ee6949f7b',
+            size: 1086,
+        );
 
         $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
@@ -62,12 +64,13 @@ final class SizeTest extends TestCase
      */
     public function testGetValueInMB(): void
     {
-        $resource = new RemoteResource([
-            'remoteId' => 'folder/test_resource',
-            'type' => 'image',
-            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
-            'size' => 269840548,
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'folder/test_resource',
+            type: RemoteResource::TYPE_IMAGE,
+            url: 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            md5: '6bb630def95be3bd34aa7dbd0d564e8a',
+            size: 269840548,
+        );
 
         $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
@@ -80,12 +83,13 @@ final class SizeTest extends TestCase
      */
     public function testGetValueInGB(): void
     {
-        $resource = new RemoteResource([
-            'remoteId' => 'folder/test_resource',
-            'type' => 'image',
-            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
-            'size' => 269840548462,
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'folder/test_resource',
+            type: RemoteResource::TYPE_IMAGE,
+            url: 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            md5: 'd7f6d6d649e3b9c3a190722ca2fff28e',
+            size: 269840548462,
+        );
 
         $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
@@ -98,12 +102,13 @@ final class SizeTest extends TestCase
      */
     public function testGetValueInTB(): void
     {
-        $resource = new RemoteResource([
-            'remoteId' => 'folder/test_resource',
-            'type' => 'image',
-            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
-            'size' => 269840548462634,
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'folder/test_resource',
+            type: RemoteResource::TYPE_IMAGE,
+            url: 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            md5: '680b24cf6eb900c4d178428301806916',
+            size: 269840548462634,
+        );
 
         $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
@@ -116,12 +121,13 @@ final class SizeTest extends TestCase
      */
     public function testGetValueInPB(): void
     {
-        $resource = new RemoteResource([
-            'remoteId' => 'folder/test_resource',
-            'type' => 'image',
-            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
-            'size' => 269840548462634154,
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'folder/test_resource',
+            type: RemoteResource::TYPE_IMAGE,
+            url: 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            md5: 'b099205fc0313a39cc72918e9a82fa07',
+            size: 269840548462634154,
+        );
 
         $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
@@ -134,11 +140,12 @@ final class SizeTest extends TestCase
      */
     public function testGetValueWithNoSize(): void
     {
-        $resource = new RemoteResource([
-            'remoteId' => 'folder/test_resource',
-            'type' => 'image',
-            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'folder/test_resource',
+            type: RemoteResource::TYPE_IMAGE,
+            url: 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            md5: 'd237f07750422bcc2ab88f677bd5668b',
+        );
 
         $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 

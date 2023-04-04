@@ -19,13 +19,14 @@ final class ItemTest extends TestCase
     protected function setUp(): void
     {
         $this->location = new RemoteResourceLocation(
-            new RemoteResource([
-                'remoteId' => 'upload|image|folder/test_resource',
-                'type' => 'image',
-                'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
-                'name' => 'test_resource',
-                'folder' => Folder::fromPath('folder'),
-            ]),
+            new RemoteResource(
+                remoteId: 'upload|image|folder/test_resource',
+                type: RemoteResource::TYPE_IMAGE,
+                url: 'https://cloudinary.com/test/upload/image/folder/test_resource',
+                md5: 'db4133438a186b6895d8e0fc0f253302',
+                name: 'test_resource',
+                folder: Folder::fromPath('folder'),
+            ),
         );
 
         $this->item = new Item($this->location);

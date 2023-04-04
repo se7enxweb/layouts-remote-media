@@ -15,8 +15,10 @@ use Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler;
 use Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\Core\Resolver\Variation as VariationResolver;
+use Netgen\RemoteMedia\Core\Transformation\Registry;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 final class RemoteMediaHandlerTest extends TestCase
 {
@@ -36,21 +38,24 @@ final class RemoteMediaHandlerTest extends TestCase
     {
         $this->valueLoaderMock = $this->createMock(ValueLoaderInterface::class);
 
-        $variationResolver = new VariationResolver();
-        $variationResolver->setVariations([
-            'netgen_layouts_block' => [
-                'Small' => [
-                    'transformations' => [
-                        'limit' => [300],
+        $variationResolver = new VariationResolver(
+            new Registry(),
+            new NullLogger(),
+            [
+                'netgen_layouts_block' => [
+                    'Small' => [
+                        'transformations' => [
+                            'limit' => [300],
+                        ],
                     ],
-                ],
-                'Big' => [
-                    'transformations' => [
-                        'limit' => [1200],
+                    'Big' => [
+                        'transformations' => [
+                            'limit' => [1200],
+                        ],
                     ],
                 ],
             ],
-        ]);
+        );
 
         $this->allowedResourceTypes = ['image', 'video'];
 
@@ -126,11 +131,12 @@ final class RemoteMediaHandlerTest extends TestCase
             ],
         ]);
 
-        $value = new RemoteResource([
-            'remoteId' => 'folder/subfolder/image_name.jpg',
-            'type' => 'image',
-            'url' => 'https://cloudinary.com/test/upload/image/folder/subfolder/image_name.jpg',
-        ]);
+        $value = new RemoteResource(
+            remoteId: 'folder/subfolder/image_name.jpg',
+            type: RemoteResource::TYPE_IMAGE,
+            url: 'https://cloudinary.com/test/upload/image/folder/subfolder/image_name.jpg',
+            md5: '185901e0a6f0c338cc4115a8b1923f44',
+        );
 
         $this->valueLoaderMock
             ->expects(self::once())

@@ -47,13 +47,14 @@ final class RemoteMediaValueLoaderTest extends TestCase
      */
     public function testLoadExisting(): void
     {
-        $resource = new RemoteResource([
-            'type' => RemoteResource::TYPE_VIDEO,
-            'remoteId' => 'upload|video|folder/test_resource',
-            'url' => 'https://cloudinary.com/test/upload/video/folder/test_resource',
-            'folder' => Folder::fromPath('folder'),
-            'name' => 'test_resource',
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'upload|video|folder/test_resource',
+            type: RemoteResource::TYPE_VIDEO,
+            url: 'https://cloudinary.com/test/upload/video/folder/test_resource',
+            md5: '922adce6ceff0f0ab367cf321bdd1909',
+            name: 'test_resource',
+            folder: Folder::fromPath('folder'),
+        );
 
         $location = new RemoteResourceLocation($resource, 'netgen_layouts_value');
 
@@ -75,13 +76,14 @@ final class RemoteMediaValueLoaderTest extends TestCase
      */
     public function testLoadNewLocation(): void
     {
-        $resource = new RemoteResource([
-            'type' => RemoteResource::TYPE_VIDEO,
-            'remoteId' => 'upload|video|folder/test_resource',
-            'url' => 'https://cloudinary.com/test/upload/video/folder/test_resource',
-            'folder' => Folder::fromPath('folder'),
-            'name' => 'test_resource',
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'upload|video|folder/test_resource',
+            type: RemoteResource::TYPE_VIDEO,
+            url: 'https://cloudinary.com/test/upload/video/folder/test_resource',
+            md5: '5a4c5dd69f0c282cdec63a5a699d1d74',
+            name: 'test_resource',
+            folder: Folder::fromPath('folder'),
+        );
 
         $location = new RemoteResourceLocation($resource, 'netgen_layouts_value');
 
@@ -126,13 +128,14 @@ final class RemoteMediaValueLoaderTest extends TestCase
      */
     public function testLoadNewResource(): void
     {
-        $resource = new RemoteResource([
-            'type' => RemoteResource::TYPE_VIDEO,
-            'remoteId' => 'upload|video|folder/test_resource',
-            'url' => 'https://cloudinary.com/test/upload/video/folder/test_resource',
-            'folder' => Folder::fromPath('folder'),
-            'name' => 'test_resource',
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'upload|video|folder/test_resource',
+            type: RemoteResource::TYPE_VIDEO,
+            url: 'https://cloudinary.com/test/upload/video/folder/test_resource',
+            md5: '3c0c49aac4b5dd39ecf1cf6e6a6555ca',
+            name: 'test_resource',
+            folder: Folder::fromPath('folder'),
+        );
 
         $location = new RemoteResourceLocation($resource, 'netgen_layouts_value');
 
@@ -208,15 +211,16 @@ final class RemoteMediaValueLoaderTest extends TestCase
      * @covers \Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader::__construct
      * @covers \Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader::loadByRemoteId
      */
-    public function testloadByRemoteId(): void
+    public function testLoadByRemoteId(): void
     {
-        $resource = new RemoteResource([
-            'type' => RemoteResource::TYPE_VIDEO,
-            'remoteId' => 'upload|video|folder/test_resource',
-            'url' => 'https://cloudinary.com/test/upload/video/folder/test_resource',
-            'folder' => Folder::fromPath('folder'),
-            'name' => 'test_resource',
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'upload|video|folder/test_resource',
+            type: RemoteResource::TYPE_VIDEO,
+            url: 'https://cloudinary.com/test/upload/video/folder/test_resource',
+            md5: '7646ae197b0fa3a85ccd8f48e35a600b',
+            name: 'test_resource',
+            folder: Folder::fromPath('folder'),
+        );
 
         $location = new RemoteResourceLocation($resource, 'netgen_layouts_value');
 

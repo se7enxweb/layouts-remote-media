@@ -43,11 +43,12 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
             ->expects(self::once())
             ->method('loadFromRemote')
             ->with(self::identicalTo('upload|image|folder/test_resource'))
-            ->willReturn(new RemoteResource([
-                'type' => RemoteResource::TYPE_IMAGE,
-                'remoteId' => 'upload|image|folder/test_resource',
-                'url' => 'https://cloudinary.com/test/upload/image/test_resource',
-            ]));
+            ->willReturn(new RemoteResource(
+                remoteId: 'upload|image|folder/test_resource',
+                type: RemoteResource::TYPE_IMAGE,
+                url: 'https://cloudinary.com/test/upload/image/test_resource',
+                md5: '26c3d6d70a02166ee368be096ea0a660',
+            ));
 
         $this->assertValid(true, 'upload||image||folder|test_resource');
     }

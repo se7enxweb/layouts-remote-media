@@ -118,11 +118,12 @@ final class RemoteMediaTypeTest extends TestCase
             ->expects(self::once())
             ->method('loadFromRemote')
             ->with(self::identicalTo('upload|image|folder/test_resource'))
-            ->willReturn(new RemoteResource([
-                'type' => 'image',
-                'remoteId' => 'upload|image|folder/test_resource',
-                'url' => 'https://cloudinary.com/test/upload/folder/test_resource',
-            ]));
+            ->willReturn(new RemoteResource(
+                remoteId: 'upload|image|folder/test_resource',
+                type: RemoteResource::TYPE_IMAGE,
+                url: 'https://cloudinary.com/test/upload/folder/test_resource',
+                md5: '5d7a812a020b40e23411edbc83cb809f',
+            ));
 
         $parameter = $this->getParameterDefinition([], true);
         $validator = Validation::createValidatorBuilder()
@@ -199,11 +200,12 @@ final class RemoteMediaTypeTest extends TestCase
         return [
             [null, true],
             [
-                new RemoteResource([
-                    'type' => 'image',
-                    'remoteId' => 'upload|image|folder/test_resource',
-                    'url' => 'https://cloudinary.com/test/upload/folder/test_resource',
-                ]),
+                new RemoteResource(
+                    remoteId: 'upload|image|folder/test_resource',
+                    type: RemoteResource::TYPE_IMAGE,
+                    url: 'https://cloudinary.com/test/upload/folder/test_resource',
+                    md5: 'f1b602d42f9760d1c658f780f12109df',
+                ),
                 false,
             ],
         ];

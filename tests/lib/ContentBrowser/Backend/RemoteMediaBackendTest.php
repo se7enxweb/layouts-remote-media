@@ -179,13 +179,14 @@ final class RemoteMediaBackendTest extends TestCase
     public function testLoadItem(): void
     {
         $value = 'upload||video||media|videos|my_video.mp4';
-        $resource = new RemoteResource([
-            'remoteId' => 'upload|video|media/videos/my_video.mp4',
-            'type' => 'video',
-            'url' => 'https://cloudinary.com/test/upload/video/media/videos/my_video.mp4',
-            'folder' => Folder::fromPath('media/videos'),
-            'name' => 'my_video.mp4',
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'upload|video|media/videos/my_video.mp4',
+            type: RemoteResource::TYPE_VIDEO,
+            url: 'https://cloudinary.com/test/upload/video/media/videos/my_video.mp4',
+            md5: 'd4e74f7778d6c5a65f8066593e06a93d',
+            name: 'my_video.mp4',
+            folder: Folder::fromPath('media/videos'),
+        );
 
         $this->providerMock
             ->expects(self::once())
@@ -344,10 +345,10 @@ final class RemoteMediaBackendTest extends TestCase
             ->expects(self::never())
             ->method('resolve');
 
-        $query = new Query([
-            'types' => ['image'],
-            'limit' => 25,
-        ]);
+        $query = new Query(
+            types: ['image'],
+            limit: 25,
+        );
 
         $searchResult = $this->getSearchResult();
 
@@ -377,11 +378,11 @@ final class RemoteMediaBackendTest extends TestCase
         $location = Location::createFromId('all||media|new');
         $nextCursor = 'k83hn24hs92ao98';
 
-        $query = new Query([
-            'types' => ['image', 'audio', 'video', 'document', 'other'],
-            'limit' => 5,
-            'folders' => ['media/new'],
-        ]);
+        $query = new Query(
+            types: ['image', 'audio', 'video', 'document', 'other'],
+            folders: [Folder::fromPath('media/new')],
+            limit: 5,
+        );
 
         $this->nextCursorResolverMock
             ->expects(self::once())
@@ -389,12 +390,12 @@ final class RemoteMediaBackendTest extends TestCase
             ->with($query, 5)
             ->willReturn($nextCursor);
 
-        $query = new Query([
-            'types' => ['image', 'audio', 'video', 'document', 'other'],
-            'limit' => 5,
-            'folders' => ['media/new'],
-            'nextCursor' => $nextCursor,
-        ]);
+        $query = new Query(
+            types: ['image', 'audio', 'video', 'document', 'other'],
+            folders: [Folder::fromPath('media/new')],
+            limit: 5,
+            nextCursor: $nextCursor,
+        );
 
         $searchResult = $this->getSearchResult();
 
@@ -425,11 +426,11 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->config->setParameter('allowed_types', 'image,other');
 
-        $query = new Query([
-            'types' => ['image', 'other'],
-            'limit' => 5,
-            'folders' => ['media/latest'],
-        ]);
+        $query = new Query(
+            types: ['image', 'other'],
+            folders: [Folder::fromPath('media/latest')],
+            limit: 5,
+        );
 
         $this->nextCursorResolverMock
             ->expects(self::never())
@@ -465,10 +466,10 @@ final class RemoteMediaBackendTest extends TestCase
             ->expects(self::never())
             ->method('resolve');
 
-        $query = new Query([
-            'types' => ['video'],
-            'limit' => 25,
-        ]);
+        $query = new Query(
+            types: ['video'],
+            limit: 25,
+        );
 
         $searchResult = $this->getEmptySearchResult();
 
@@ -502,10 +503,10 @@ final class RemoteMediaBackendTest extends TestCase
     {
         $location = Location::createAsSection('video', 'Video');
 
-        $query = new Query([
-            'types' => ['video'],
-            'limit' => 0,
-        ]);
+        $query = new Query(
+            types: ['video'],
+            limit: 0,
+        );
 
         $this->providerMock
             ->expects(self::once())
@@ -524,10 +525,10 @@ final class RemoteMediaBackendTest extends TestCase
     {
         $location = Location::createAsSection('all', 'All');
 
-        $query = new Query([
-            'types' => ['image', 'audio', 'video', 'document', 'other'],
-            'limit' => 0,
-        ]);
+        $query = new Query(
+            types: ['image', 'audio', 'video', 'document', 'other'],
+            limit: 0,
+        );
 
         $this->providerMock
             ->expects(self::once())
@@ -548,11 +549,11 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->config->setParameter('allowed_types', 'image');
 
-        $query = new Query([
-            'types' => ['image'],
-            'limit' => 0,
-            'folders' => ['media/latest/blog'],
-        ]);
+        $query = new Query(
+            types: ['image'],
+            folders: [Folder::fromPath('media/latest/blog')],
+            limit: 0,
+        );
 
         $this->providerMock
             ->expects(self::once())
@@ -573,10 +574,10 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->config->setParameter('allowed_types', '');
 
-        $query = new Query([
-            'types' => ['image', 'audio', 'video', 'document', 'other'],
-            'limit' => 0,
-        ]);
+        $query = new Query(
+            types: ['image', 'audio', 'video', 'document', 'other'],
+            limit: 0,
+        );
 
         $this->providerMock
             ->expects(self::once())
@@ -612,11 +613,11 @@ final class RemoteMediaBackendTest extends TestCase
             ->expects(self::never())
             ->method('resolve');
 
-        $query = new Query([
-            'query' => 'test',
-            'types' => ['image', 'audio', 'video', 'document', 'other'],
-            'limit' => 25,
-        ]);
+        $query = new Query(
+            query: 'test',
+            types: ['image', 'audio', 'video', 'document', 'other'],
+            limit: 25,
+        );
 
         $searchResult = $this->getSearchResult();
 
@@ -653,12 +654,12 @@ final class RemoteMediaBackendTest extends TestCase
             ->expects(self::never())
             ->method('resolve');
 
-        $query = new Query([
-            'query' => 'test',
-            'folders' => [Folder::fromPath('media')],
-            'types' => ['other'],
-            'limit' => 25,
-        ]);
+        $query = new Query(
+            query: 'test',
+            types: ['other'],
+            folders: [Folder::fromPath('media')],
+            limit: 25,
+        );
 
         $searchResult = $this->getSearchResult();
 
@@ -692,11 +693,11 @@ final class RemoteMediaBackendTest extends TestCase
 
         $nextCursor = 'k83hn24hs92ao98';
 
-        $query = new Query([
-            'query' => 'test',
-            'types' => ['image'],
-            'limit' => 5,
-        ]);
+        $query = new Query(
+            query: 'test',
+            types: ['image'],
+            limit: 5,
+        );
 
         $this->nextCursorResolverMock
             ->expects(self::once())
@@ -704,12 +705,12 @@ final class RemoteMediaBackendTest extends TestCase
             ->with($query, 5)
             ->willReturn($nextCursor);
 
-        $query = new Query([
-            'query' => 'test',
-            'types' => ['image'],
-            'limit' => 5,
-            'nextCursor' => $nextCursor,
-        ]);
+        $query = new Query(
+            query: 'test',
+            types: ['image'],
+            limit: 5,
+            nextCursor: $nextCursor,
+        );
 
         $searchResult = $this->getSearchResult();
 
@@ -743,11 +744,11 @@ final class RemoteMediaBackendTest extends TestCase
             ->expects(self::never())
             ->method('resolve');
 
-        $query = new Query([
-            'query' => 'non-existing text',
-            'types' => ['video'],
-            'limit' => 25,
-        ]);
+        $query = new Query(
+            query: 'non-existing text',
+            types: ['video'],
+            limit: 25,
+        );
 
         $searchResult = $this->getEmptySearchResult();
 
@@ -776,12 +777,12 @@ final class RemoteMediaBackendTest extends TestCase
 
         $searchQuery = new SearchQuery('test', $location);
 
-        $query = new Query([
-            'query' => 'test',
-            'types' => ['other'],
-            'limit' => 25,
-            'folders' => ['media/files'],
-        ]);
+        $query = new Query(
+            query: 'test',
+            types: ['other'],
+            folders: [Folder::fromPath('media/files')],
+            limit: 25,
+        );
 
         $this->providerMock
             ->expects(self::once())
@@ -804,12 +805,12 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->config->setParameter('allowed_types', 'video');
 
-        $query = new Query([
-            'query' => 'test',
-            'types' => ['video'],
-            'limit' => 25,
-            'folders' => ['media/files'],
-        ]);
+        $query = new Query(
+            query: 'test',
+            types: ['video'],
+            folders: [Folder::fromPath('media/files')],
+            limit: 25,
+        );
 
         $this->providerMock
             ->expects(self::once())
@@ -827,11 +828,11 @@ final class RemoteMediaBackendTest extends TestCase
     {
         $searchQuery = new SearchQuery('test');
 
-        $query = new Query([
-            'query' => 'test',
-            'types' => ['image', 'audio', 'video', 'document', 'other'],
-            'limit' => 25,
-        ]);
+        $query = new Query(
+            query: 'test',
+            types: ['image', 'audio', 'video', 'document', 'other'],
+            limit: 25,
+        );
 
         $this->providerMock
             ->expects(self::once())
@@ -851,11 +852,11 @@ final class RemoteMediaBackendTest extends TestCase
             ->expects(self::never())
             ->method('resolve');
 
-        $query = new Query([
-            'query' => 'test',
-            'types' => ['image', 'audio', 'video', 'document', 'other'],
-            'limit' => 25,
-        ]);
+        $query = new Query(
+            query: 'test',
+            types: ['image', 'audio', 'video', 'document', 'other'],
+            limit: 25,
+        );
 
         $searchResult = $this->getSearchResult();
 
@@ -881,11 +882,11 @@ final class RemoteMediaBackendTest extends TestCase
      */
     public function testSearchCount(): void
     {
-        $query = new Query([
-            'query' => 'test',
-            'types' => ['image', 'audio', 'video', 'document', 'other'],
-            'limit' => 25,
-        ]);
+        $query = new Query(
+            query: 'test',
+            types: ['image', 'audio', 'video', 'document', 'other'],
+            limit: 25,
+        );
 
         $this->providerMock
             ->expects(self::once())
@@ -902,11 +903,11 @@ final class RemoteMediaBackendTest extends TestCase
             15,
             'testcursor123',
             [
-                $this->getResource('test_resource_1', 'image', 'https://cloudinary.com/test/upload/image/test_resource_1'),
-                $this->getResource('test_resource_2', 'video', 'https://cloudinary.com/test/upload/video/test_resource_2'),
-                $this->getResource('test_resource_3', 'audio', 'https://cloudinary.com/test/upload/audio/test_resource_3'),
-                $this->getResource('test_resource_4', 'document', 'https://cloudinary.com/test/upload/document/test_resource_4'),
-                $this->getResource('folder/test_resource_5', 'other', 'https://cloudinary.com/test/upload/other/test_resource_5'),
+                $this->getResource('test_resource_1', RemoteResource::TYPE_IMAGE, 'https://cloudinary.com/test/upload/image/test_resource_1', '857bcccd18b32a4463760bffd77d87f6'),
+                $this->getResource('test_resource_2', RemoteResource::TYPE_VIDEO, 'https://cloudinary.com/test/upload/video/test_resource_2', '83c98c7ec6a1d2ef4b609892ffb17f3e'),
+                $this->getResource('test_resource_3', RemoteResource::TYPE_AUDIO, 'https://cloudinary.com/test/upload/audio/test_resource_3', '495219081e3353c31ef3e149f99b04fe'),
+                $this->getResource('test_resource_4', RemoteResource::TYPE_DOCUMENT, 'https://cloudinary.com/test/upload/document/test_resource_4', 'd44f50df3af3a8e497269859c77acedf'),
+                $this->getResource('folder/test_resource_5', RemoteResource::TYPE_OTHER, 'https://cloudinary.com/test/upload/raw/test_resource_5', '955d612b460288731a497557b6f4ffb0'),
             ],
         );
     }
@@ -916,12 +917,13 @@ final class RemoteMediaBackendTest extends TestCase
         return new Result(0, null, []);
     }
 
-    private function getResource(string $remoteId, string $type, string $url): RemoteResource
+    private function getResource(string $remoteId, string $type, string $url, string $md5): RemoteResource
     {
-        return new RemoteResource([
-            'remoteId' => $remoteId,
-            'type' => $type,
-            'url' => $url,
-        ]);
+        return new RemoteResource(
+            remoteId: $remoteId,
+            type: $type,
+            url: $url,
+            md5: $md5,
+        );
     }
 }

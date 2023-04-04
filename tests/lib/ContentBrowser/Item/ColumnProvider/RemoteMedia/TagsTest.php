@@ -25,12 +25,13 @@ final class TagsTest extends TestCase
      */
     public function testGetValue(): void
     {
-        $resource = new RemoteResource([
-            'remoteId' => 'folder/test_resource',
-            'type' => 'image',
-            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
-            'tags' => ['tag1', 'tag2', 'tag3'],
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'folder/test_resource',
+            type: RemoteResource::TYPE_IMAGE,
+            url: 'htstps://cloudinary.com/test/upload/image/folder/test_resource',
+            md5: '3c15a1d4bbcda8d067478a6316518acc',
+            tags: ['tag1', 'tag2', 'tag3'],
+        );
 
         $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
@@ -42,11 +43,12 @@ final class TagsTest extends TestCase
      */
     public function testGetValueWithNoTags(): void
     {
-        $resource = new RemoteResource([
-            'remoteId' => 'folder/test_resource',
-            'type' => 'image',
-            'url' => 'https://cloudinary.com/test/upload/image/folder/test_resource',
-        ]);
+        $resource = new RemoteResource(
+            remoteId: 'folder/test_resource',
+            type: RemoteResource::TYPE_IMAGE,
+            url: 'https://cloudinary.com/test/upload/image/folder/test_resource',
+            md5: 'dc2474ad19a69be40dff3254af497d73',
+        );
 
         $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 

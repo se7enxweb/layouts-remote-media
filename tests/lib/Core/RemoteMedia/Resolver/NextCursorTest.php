@@ -7,6 +7,7 @@ namespace Netgen\Layouts\RemoteMedia\Tests\Core\RemoteMedia\Resolver;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolverInterface;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor as NextCursorResolver;
 use Netgen\RemoteMedia\API\Search\Query;
+use Netgen\RemoteMedia\API\Values\Folder;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
@@ -17,7 +18,7 @@ final class NextCursorTest extends TestCase
 {
     private const CACHE_TTL = 3600;
 
-    private const TEST_CACHE_KEY = 'layoutsremotemedia-cloudinary-nextcursor-test __ ble __ __ a _test$|15||image|_test_folder_||some tag|||created_at=desc-30';
+    private const TEST_CACHE_KEY = 'layoutsremotemedia-cloudinary-nextcursor-test __ ble __ __ a _test$|15||image|test_folder||some tag|||created_at=desc-30';
 
     private const TEST_CURSOR = 'k84jh71osdf355asder';
 
@@ -119,12 +120,12 @@ final class NextCursorTest extends TestCase
 
     private function getQuery(): Query
     {
-        return new Query([
-            'query' => 'test {} ble () /\ a @test$',
-            'types' => ['image'],
-            'folders' => ['(test_folder)'],
-            'tags' => ['some tag'],
-            'limit' => 15,
-        ]);
+        return new Query(
+            query: 'test {} ble () /\ a @test$',
+            types: ['image'],
+            folders: [Folder::fromPath('test_folder')],
+            tags: ['some tag'],
+            limit: 15,
+        );
     }
 }
