@@ -61,5 +61,19 @@
                 <referencedProperty name="Netgen\Bundle\LayoutsRemoteMediaBundle\Command\MigrateDataV1ToV2Command::$output" />
             </errorLevel>
         </PropertyNotSetInConstructor>
+
+        <InvalidArgument>
+            <errorLevel type="suppress">
+                <file name="lib/ContentBrowser/Backend/RemoteMediaBackend.php" />
+                <referencedFunction name="Netgen\RemoteMedia\API\Search\Query::__construct" />
+            </errorLevel>
+        </InvalidArgument>
+
+        <UndefinedInterfaceMethod>
+            <errorLevel type="suppress">
+                <file name="bundle/DependencyInjection/Configuration.php" />
+                <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeParentInterface::integerNode" />
+            </errorLevel>
+        </UndefinedInterfaceMethod>
     </issueHandlers>
 </psalm>
