@@ -78,7 +78,7 @@ final class RemoteMediaHandler extends BlockDefinitionHandler
         $variations = $this->variationResolver->getAvailableVariations(self::LAYOUTS_BLOCK_VARIATIONS);
 
         foreach ($variations as $key => $value) {
-            $options[(string) $key] = (string) $key;
+            $options[$key] = $key;
         }
 
         return $options;
