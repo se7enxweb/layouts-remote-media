@@ -1,7 +1,7 @@
 {
-    "name": "netgen/layouts-remote-media",
+    "name": "se7enxweb/layouts-remote-media",
     "description": "Netgen Layouts & Remote Media integration",
-    "license": "GPL-2.0-only",
+    "license": "GPL-2.0-or-later",
     "type": "symfony-bundle",
     "authors": [
         {
@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "netgen/layouts-ezplatform": "^1.2",
+        "se7enxweb/layouts-ezplatform": "^1.2",
         "netgen/remote-media-bundle": "^2.0@alpha"
     },
     "require-dev": {
